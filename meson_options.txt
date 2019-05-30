@@ -1,0 +1,2 @@
+option('datetime_setter_libexecdir', type: 'string', value: '', description: 'Directory for xfce4-datetime-setter\'s libexecdir')
+
