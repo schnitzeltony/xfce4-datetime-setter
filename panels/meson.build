@@ -1,3 +1,5 @@
+# NO-AUTO-UPGRADE
+
 subdir('common')
 
 panels = [

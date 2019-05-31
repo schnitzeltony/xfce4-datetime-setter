@@ -13,7 +13,7 @@ i18n.merge_file(
   desktop,
   type: 'desktop',
   input: desktop_in,
-  output: desktop,
+  output: 'xfce-datetime.desktop',
   po_dir: po_dir,
   install: true,
   install_dir: datetime_setter_desktopdir
