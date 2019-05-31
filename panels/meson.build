@@ -7,7 +7,6 @@ panels = [
 ]
 
 panels_list = []
-panels_libs = []
 foreach cappletname: panels
   cflags = [
     '-DG_LOG_DOMAIN="@0@-cc-panel"'.format(cappletname),

@@ -120,7 +120,6 @@ resources = gnome.compile_resources(
 )
 
 sources = files(
-  'cc-datetime-panel.c',
   'cc-timezone-map.c',
   'tz.c'
 )
@@ -175,7 +174,11 @@ datetime_panel_lib = static_library(
   dependencies: deps,
   c_args: cflags
 )
-panels_libs += datetime_panel_lib
+
+datetime_panel_dep = declare_dependency(
+  include_directories: [ common_inc, include_directories('.') ],
+  link_with: datetime_panel_lib
+)
 
 subdir('po-timezones')
 subdir('icons')

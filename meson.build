@@ -96,7 +96,7 @@ desktop_conf.set('VERSION', meson.project_version())
 po_dir = join_paths(meson.source_root(), 'po')
 its_dir = join_paths(meson.source_root(), 'gettext')
 
-top_inc = [ include_directories('.'), include_directories('./stubs'), include_directories('./libgnome-desktop') ]
+top_inc = [ include_directories('.') ]
 
 subdir('po')
 subdir('panels')
