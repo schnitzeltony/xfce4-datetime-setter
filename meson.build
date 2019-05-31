@@ -100,6 +100,7 @@ top_inc = [ include_directories('.'), include_directories('./stubs'), include_di
 
 subdir('po')
 subdir('panels')
+subdir('xfce')
 
 
 configure_file(

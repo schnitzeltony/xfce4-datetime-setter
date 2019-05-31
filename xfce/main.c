@@ -37,7 +37,6 @@
 #include <libxfce4util/libxfce4util.h>
 
 #include "datetime-dialog.h"
-#include "datetime-dialog_ui.h"
 
 /* Option entries */
 static GdkNativeWindow opt_socket_id = 0;
