@@ -9,6 +9,7 @@ xfce_datetime_c_args = [
 
 xfce_datetime_deps = [
   libxfce4ui_dep,
+  gnome_desktop_dep,
 ]
 
 xfce_datetime_exe = executable(

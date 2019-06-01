@@ -69,6 +69,8 @@ libxfce4ui_dep = dependency('libxfce4ui-2', version: '>= 4.13.0')
 gdk_pixbuf_dep = dependency('gdk-pixbuf-2.0', version: '>= 2.23.0')
 gio_dep = dependency('gio-2.0')
 glib_dep = dependency('glib-2.0', version: '>= 2.53.0')
+# we need gnome_get_country_from_code
+gnome_desktop_dep = dependency('gnome-desktop-3.0', version: '>= 3.27.90')
 libxml_dep = dependency('libxml-2.0')
 x11_dep = dependency('x11')
 
