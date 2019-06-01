@@ -14,7 +14,7 @@ xfce_datetime_deps = [
 xfce_datetime_exe = executable(
   'xfce4-datetime-settings',
   xfce_datetime_sources,
-  dependencies: xfce_datetime_deps,
+  dependencies: [ xfce_datetime_deps, libwidgets_dep, datetime_panel_dep, m_dep ],
   include_directories: top_inc,
   c_args: xfce_datetime_c_args,
   install: true,

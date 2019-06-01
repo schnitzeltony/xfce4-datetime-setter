@@ -28,7 +28,7 @@
 
 #include <langinfo.h>
 #include <sys/time.h>
-#include "timezone-map.h"
+#include "cc-timezone-map.h"
 #include "timedated.h"
 
 #include <string.h>
@@ -37,6 +37,70 @@
 
 /* FIXME: This should be "Etc/GMT" instead */
 #define DEFAULT_TZ "Europe/London"
+
+typedef
+struct _DateTime
+{
+/*    CcPanel parent_instance;*/
+
+    GtkBuilder *builder;
+    GtkWidget *map;
+
+    GList *listboxes;
+    GList *listboxes_reverse;
+    GList *toplevels;
+
+    TzLocation *current_location;
+
+    GtkTreeModelFilter *city_filter;
+
+    GDateTime *date;
+
+    GSettings *clock_settings;
+    GSettings *datetime_settings;
+    GSettings *filechooser_settings;
+    /*GDesktopClockFormat clock_format;*/
+    GtkWidget *am_label;
+    GtkWidget *am_pm_button;
+    GtkWidget *am_pm_stack;
+    GtkWidget *aspectmap;
+    GtkWidget *auto_datetime_row;
+    GtkWidget *auto_timezone_row;
+    GtkWidget *auto_timezone_switch;
+    GtkListStore *city_liststore;
+    GtkTreeModelSort *city_modelsort;
+    GtkWidget *date_grid;
+    GtkWidget *datetime_button;
+    GtkWidget *datetime_dialog;
+    GtkWidget *datetime_label;
+    GtkWidget *day_spinbutton;
+    GtkWidget *format_combobox;
+    GtkWidget *h_spinbutton;
+    GtkWidget *listbox1;
+    GtkWidget *listbox2;
+    GtkLockButton *lock_button;
+    GtkWidget *m_spinbutton;
+    GtkWidget *month_combobox;
+    GtkListStore *month_liststore;
+    GtkWidget *network_time_switch;
+    GtkWidget *pm_label;
+    GtkWidget *time_box;
+    GtkWidget *time_grid;
+    GtkWidget *timezone_button;
+    GtkWidget *timezone_dialog;
+    GtkWidget *timezone_label;
+    GtkWidget *timezone_searchentry;
+    GtkWidget *year_spinbutton;
+
+    /*GnomeWallClock *clock_tracker;*/
+
+    Timedate1 *dtm;
+    GCancellable *cancellable;
+
+    GPermission *permission;
+    GPermission *tz_permission;
+    GSettings *location_settings;
+} DateTime;
 
 struct _XfceDateTimeDialogClass
 {
@@ -354,7 +418,7 @@ on_user_city_changed (GtkComboBox        *box,
         gtk_tree_model_get (gtk_combo_box_get_model (box), &iter,
                             CITY_COL_ZONE, &zone, -1);
 
-        xfdts_timezone_map_set_timezone (XFDTS_TIMEZONE_MAP (priv->map), zone);
+        cc_timezone_map_set_timezone (CC_TIMEZONE_MAP (priv->map), zone);
         g_free (zone);
 
         priv->timezone_changed = TRUE;
@@ -375,7 +439,7 @@ update_displayed_timezone (XfceDateTimeDialog *xfdtdlg)
     /* tz.c updates the local timezone, which means the spin buttons can be
      * updated with the current time of the new location */
 
-    current_location = xfdts_timezone_map_get_location (XFDTS_TIMEZONE_MAP (priv->map));
+    current_location = cc_timezone_map_get_location (CC_TIMEZONE_MAP (priv->map));
     split = g_strsplit (current_location->zone, "/", 2);
 
     /* remove underscores */
@@ -428,7 +492,7 @@ update_displayed_timezone (XfceDateTimeDialog *xfdtdlg)
 }
 
 static void
-on_user_map_location_changed (XfdtsTimezoneMap   *map,
+on_user_map_location_changed (CcTimezoneMap      *map,
                               TzLocation         *location,
                               XfceDateTimeDialog *xfdtdlg)
 {
@@ -465,10 +529,10 @@ get_initial_timezone (XfceDateTimeDialog *xfdtdlg)
         timezone = NULL;
 
     if (timezone == NULL ||
-        !xfdts_timezone_map_set_timezone (XFDTS_TIMEZONE_MAP (priv->map), timezone))
+        !cc_timezone_map_set_timezone (CC_TIMEZONE_MAP (priv->map), timezone))
     {
         g_warning ("Timezone '%s' is unhandled, setting %s as default", timezone ? timezone : "(null)", DEFAULT_TZ);
-        xfdts_timezone_map_set_timezone (XFDTS_TIMEZONE_MAP (priv->map), DEFAULT_TZ);
+        cc_timezone_map_set_timezone (CC_TIMEZONE_MAP (priv->map), DEFAULT_TZ);
     }
     update_displayed_timezone (xfdtdlg);
 }
@@ -886,7 +950,7 @@ start_next_apply_action(XfceDateTimeDialog *xfdtdlg)
     gboolean using_ntp;
     gint64 unixtime_sec;
 
-    current_location = xfdts_timezone_map_get_location (XFDTS_TIMEZONE_MAP (priv->map));
+    current_location = cc_timezone_map_get_location (CC_TIMEZONE_MAP (priv->map));
     switch(priv->current_apply_action)
     {
     case APPLY_TIMEZONE:
@@ -1054,7 +1118,7 @@ xfce_date_time_dialog_setup (GObject *dlgobj, GtkBuilder *builder)
                       G_CALLBACK (on_user_month_year_changed), xfdtdlg);
 
     /* set up timezone map */
-    priv->map = widget = GTK_WIDGET (xfdts_timezone_map_new ());
+    priv->map = widget = GTK_WIDGET (cc_timezone_map_new ());
     gtk_widget_show (widget);
 
     gtk_container_add (GTK_CONTAINER (W ("aspectmap")),

@@ -34,9 +34,11 @@ set_defines = [
   # package
   ['PACKAGE', meson.project_name()],
   ['PACKAGE_VERSION', meson.project_version()],
+  ['PACKAGE_BUGREPORT', 'https://github.com/schnitzeltony/xfce4-datetime-setter'],
   ['VERSION', meson.project_version()],
   # i18n
-  ['GETTEXT_PACKAGE', datetime_setter_gettext]
+  ['GETTEXT_PACKAGE', datetime_setter_gettext],
+  ['LOCALEDIR', datetime_setter_localedir]
 ]
 
 foreach define: set_defines

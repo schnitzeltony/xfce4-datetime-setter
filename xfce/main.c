@@ -32,14 +32,16 @@
 
 #include <glib.h>
 #include <gtk/gtk.h>
+#include <gtk/gtkx.h>
+
+#include <gdk/gdkx.h>
 
 #include <libxfce4ui/libxfce4ui.h>
 #include <libxfce4util/libxfce4util.h>
 
 #include "datetime-dialog.h"
 
-/* Option entries */
-static GdkNativeWindow opt_socket_id = 0;
+static gint opt_socket_id = 0;
 static gboolean opt_version = FALSE;
 static GOptionEntry option_entries[] =
 {
@@ -47,7 +49,6 @@ static GOptionEntry option_entries[] =
     { "version", 'v', 0, G_OPTION_ARG_NONE, &opt_version, N_("Version information"), NULL },
     { NULL }
 };
-
 
 static void
 datetime_settings_dialog_response (GtkWidget *dialog,
@@ -110,54 +111,45 @@ main (gint argc, gchar **argv)
         return EXIT_FAILURE;
 
     /* load the gtk user interface file*/
-    builder = gtk_builder_new ();
-    if (gtk_builder_add_from_string (builder, datetime_dialog_ui,
-                                     datetime_dialog_ui_length, &error) != 0)
+    builder = gtk_builder_new_from_resource ("/org/gnome/control-center/datetime/cc-datetime-panel.ui");
+    dlgobj = g_object_new (XFCE_TYPE_DATE_TIME_DIALOG, NULL);
+    xfce_date_time_dialog_setup (dlgobj, builder);
+
+    if (G_UNLIKELY (opt_socket_id == 0))
     {
-        dlgobj = g_object_new (XFCE_TYPE_DATE_TIME_DIALOG, NULL);
-        xfce_date_time_dialog_setup (dlgobj, builder);
+        /* build the dialog */
+        dialog = gtk_builder_get_object (builder, "dialog");
+        g_signal_connect (dialog, "response",
+                          G_CALLBACK (datetime_settings_dialog_response), NULL);
+        gtk_window_present (GTK_WINDOW (dialog));
 
-        if (G_UNLIKELY (opt_socket_id == 0))
-        {
-            /* build the dialog */
-            dialog = gtk_builder_get_object (builder, "dialog");
-            g_signal_connect (dialog, "response",
-                              G_CALLBACK (datetime_settings_dialog_response), NULL);
-            gtk_window_present (GTK_WINDOW (dialog));
+        /* To prevent the settings dialog to be saved in the session */
+        gdk_x11_set_sm_client_id ("FAKE ID");
 
-            /* To prevent the settings dialog to be saved in the session */
-            gdk_set_sm_client_id ("FAKE ID");
-
-            gtk_main ();
-        }
-        else
-        {
-            /* Create plug widget */
-            plug = gtk_plug_new (opt_socket_id);
-            g_signal_connect (plug, "delete-event", G_CALLBACK (gtk_main_quit), NULL);
-            gtk_widget_show (plug);
-
-            /* Stop startup notification */
-            gdk_notify_startup_complete ();
-
-            /* Get plug child widget */
-            plug_child = gtk_builder_get_object (builder, "plug-child");
-            gtk_widget_reparent (GTK_WIDGET (plug_child), plug);
-            gtk_widget_show (GTK_WIDGET (plug_child));
-
-            /* To prevent the settings dialog to be saved in the session */
-            gdk_set_sm_client_id ("FAKE ID");
-
-            /* Enter main loop */
-            gtk_main ();
-        }
-        g_object_unref(dlgobj);
+        gtk_main ();
     }
     else
     {
-        g_error ("Failed to load the UI file: %s.", error->message);
-        g_error_free (error);
+        /* Create plug widget */
+        plug = gtk_plug_new (opt_socket_id);
+        g_signal_connect (plug, "delete-event", G_CALLBACK (gtk_main_quit), NULL);
+        gtk_widget_show (plug);
+
+        /* Stop startup notification */
+        gdk_notify_startup_complete ();
+
+        /* Get plug child widget */
+        plug_child = gtk_builder_get_object (builder, "plug-child");
+        gtk_widget_reparent (GTK_WIDGET (plug_child), plug);
+        gtk_widget_show (GTK_WIDGET (plug_child));
+
+        /* To prevent the settings dialog to be saved in the session */
+        gdk_x11_set_sm_client_id ("FAKE ID");
+
+        /* Enter main loop */
+        gtk_main ();
     }
+    g_object_unref(dlgobj);
 
     /* Release Builder */
     g_object_unref (G_OBJECT (builder));
