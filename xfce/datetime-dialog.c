@@ -38,70 +38,6 @@
 /* FIXME: This should be "Etc/GMT" instead */
 #define DEFAULT_TZ "Europe/London"
 
-typedef
-struct _DateTime
-{
-/*    CcPanel parent_instance;*/
-
-    GtkBuilder *builder;
-    GtkWidget *map;
-
-    GList *listboxes;
-    GList *listboxes_reverse;
-    GList *toplevels;
-
-    TzLocation *current_location;
-
-    GtkTreeModelFilter *city_filter;
-
-    GDateTime *date;
-
-    GSettings *clock_settings;
-    GSettings *datetime_settings;
-    GSettings *filechooser_settings;
-    /*GDesktopClockFormat clock_format;*/
-    GtkWidget *am_label;
-    GtkWidget *am_pm_button;
-    GtkWidget *am_pm_stack;
-    GtkWidget *aspectmap;
-    GtkWidget *auto_datetime_row;
-    GtkWidget *auto_timezone_row;
-    GtkWidget *auto_timezone_switch;
-    GtkListStore *city_liststore;
-    GtkTreeModelSort *city_modelsort;
-    GtkWidget *date_grid;
-    GtkWidget *datetime_button;
-    GtkWidget *datetime_dialog;
-    GtkWidget *datetime_label;
-    GtkWidget *day_spinbutton;
-    GtkWidget *format_combobox;
-    GtkWidget *h_spinbutton;
-    GtkWidget *listbox1;
-    GtkWidget *listbox2;
-    GtkLockButton *lock_button;
-    GtkWidget *m_spinbutton;
-    GtkWidget *month_combobox;
-    GtkListStore *month_liststore;
-    GtkWidget *network_time_switch;
-    GtkWidget *pm_label;
-    GtkWidget *time_box;
-    GtkWidget *time_grid;
-    GtkWidget *timezone_button;
-    GtkWidget *timezone_dialog;
-    GtkWidget *timezone_label;
-    GtkWidget *timezone_searchentry;
-    GtkWidget *year_spinbutton;
-
-    /*GnomeWallClock *clock_tracker;*/
-
-    Timedate1 *dtm;
-    GCancellable *cancellable;
-
-    GPermission *permission;
-    GPermission *tz_permission;
-    GSettings *location_settings;
-} DateTime;
-
 struct _XfceDateTimeDialogClass
 {
     GObjectClass parent_class;
@@ -398,7 +334,7 @@ on_user_region_changed (GtkComboBox     *box,
     XfceDateTimeDialogPrivate *priv = xfdtdlg->priv;
     GtkTreeModelFilter *modelfilter;
 
-    modelfilter = GTK_TREE_MODEL_FILTER (W("city-modelfilter"));
+    modelfilter = GTK_TREE_MODEL_FILTER (W("city_modelfilter"));
 
     gtk_tree_model_filter_refilter (modelfilter);
     /* not a change which can be applied without further interaction */
@@ -469,7 +405,7 @@ update_displayed_timezone (XfceDateTimeDialog *xfdtdlg)
     /* update city combo */
     widget = GTK_WIDGET (W ("city_combobox"));
     model = gtk_combo_box_get_model (GTK_COMBO_BOX (widget));
-    gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (W ("city-modelfilter")));
+    gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (W ("city_modelfilter")));
     gtk_tree_model_get_iter_first (model, &iter);
 
     do
@@ -573,6 +509,7 @@ get_regions (TzLocation             *loc,
     split_translated = g_regex_split_simple ("[\\x{2044}\\x{2215}\\x{29f8}\\x{ff0f}/]", zone, 0, 0);
     g_free (zone);
 
+    /* TODO
     if (!g_hash_table_lookup_extended (data->table, split[0], NULL, NULL))
     {
         g_hash_table_insert (data->table, g_strdup (split[0]),
@@ -580,10 +517,11 @@ get_regions (TzLocation             *loc,
         gtk_list_store_insert_with_values (data->region_store, NULL, 0,
                                            REGION_COL_REGION, split[0],
                                            REGION_COL_REGION_TRANSLATED, split_translated[0], -1);
-    }
+    }*/
 
     /* g_regex_split_simple() splits too much for us, and would break
      * America/Argentina/Buenos_Aires into 3 strings, so rejoin the city part */
+    /* TODO
     translated_city = g_strjoinv ("/", split_translated + 1);
 
     gtk_list_store_insert_with_values (data->city_store, NULL, 0,
@@ -592,7 +530,7 @@ get_regions (TzLocation             *loc,
                                        CITY_COL_REGION, split[0],
                                        CITY_COL_REGION_TRANSLATED, split_translated[0],
                                        CITY_COL_ZONE, loc->zone,
-                                       -1);
+                                       -1);*/
 
     g_free (translated_city);
     g_strfreev (split);
@@ -1055,9 +993,6 @@ xfce_date_time_dialog_setup (GObject *dlgobj, GtkBuilder *builder)
 {
     XfceDateTimeDialog *xfdtdlg;
     XfceDateTimeDialogPrivate *priv;
-    gchar *objects[] = { "datetime-panel", "region-liststore",
-                         "city-liststore", "month-liststore",
-                         "city-modelfilter", "city-modelsort", NULL };
     char *buttons[] = { "hour_up_button", "hour_down_button",
                         "min_up_button",  "min_down_button",
                         "second_up_button",  "second_down_button" };
@@ -1128,14 +1063,15 @@ xfce_date_time_dialog_setup (GObject *dlgobj, GtkBuilder *builder)
     update_displayed_time (xfdtdlg);
     update_apply_state (xfdtdlg);
 
-    priv->locations = GTK_TREE_MODEL (W ("region-liststore"));
+    priv->locations = GTK_TREE_MODEL (W ("region_liststore"));
 
+    /* TODO
     load_regions_model (GTK_LIST_STORE (priv->locations),
                         GTK_LIST_STORE (W ("city-liststore")));
 
-    city_modelfilter = GTK_TREE_MODEL_FILTER (W ("city-modelfilter"));
+    city_modelfilter = GTK_TREE_MODEL_FILTER (W ("city_modelfilter"));
 
-    city_modelsort = GTK_TREE_MODEL_SORT (W ("city-modelsort"));
+    city_modelsort = GTK_TREE_MODEL_SORT (W ("city_modelsort"));
     gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (city_modelsort), 
 										  CITY_COL_CITY_TRANSLATED,
                                           GTK_SORT_ASCENDING);
@@ -1145,6 +1081,7 @@ xfce_date_time_dialog_setup (GObject *dlgobj, GtkBuilder *builder)
                                             (GtkTreeModelFilterVisibleFunc) city_model_filter_func,
                                             widget,
                                             NULL);
+    */
 
     /* After the initial setup, so we can be sure that
     * the model is filled up */

@@ -39,6 +39,8 @@
 #include <libxfce4ui/libxfce4ui.h>
 #include <libxfce4util/libxfce4util.h>
 
+#include "cc-datetime-resources.h"
+#include "datetime-dialog-resources.h"
 #include "datetime-dialog.h"
 
 static gint opt_socket_id = 0;
@@ -110,8 +112,11 @@ main (gint argc, gchar **argv)
     if (xfce_titled_dialog_get_type () == 0)
         return EXIT_FAILURE;
 
-    /* load the gtk user interface file*/
-    builder = gtk_builder_new_from_resource ("/org/gnome/control-center/datetime/cc-datetime-panel.ui");
+    /* load the gtk user interface */
+    g_resources_register (cc_datetime_get_resource ());
+    g_resources_register (datetime_dialog_get_resource ());
+    builder = gtk_builder_new_from_resource ("/org/xfce/DatetimeSetter/datetime-dialog.ui");
+    gtk_builder_add_from_resource (builder, "/org/gnome/control-center/datetime/cc-datetime-panel.ui", NULL);
     dlgobj = g_object_new (XFCE_TYPE_DATE_TIME_DIALOG, NULL);
     xfce_date_time_dialog_setup (dlgobj, builder);
 
@@ -140,7 +145,7 @@ main (gint argc, gchar **argv)
 
         /* Get plug child widget */
         plug_child = gtk_builder_get_object (builder, "plug-child");
-        gtk_widget_reparent (GTK_WIDGET (plug_child), plug);
+        xfce_widget_reparent (GTK_WIDGET (plug_child), plug);
         gtk_widget_show (GTK_WIDGET (plug_child));
 
         /* To prevent the settings dialog to be saved in the session */
