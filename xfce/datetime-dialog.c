@@ -28,54 +28,19 @@
 
 #include <langinfo.h>
 #include <sys/time.h>
-#include "list-box-helper.h"
 #include "cc-timezone-map.h"
 #include "timedated.h"
-//#include "date-endian.h"
-#define GNOME_DESKTOP_USE_UNSTABLE_API
 
-#include <gdesktop-enums.h>
 #include <string.h>
 #include <stdlib.h>
 #include <libintl.h>
 
-#include <glib/gi18n.h>
-#include <libgnome-desktop/gnome-languages.h>
-#include <libgnome-desktop/gnome-wall-clock.h>
-
 /* FIXME: This should be "Etc/GMT" instead */
 #define DEFAULT_TZ "Europe/London"
 
-enum {
-  CITY_COL_CITY_HUMAN_READABLE,
-  CITY_COL_ZONE,
-  CITY_NUM_COLS
-};
-
-struct _XfceDateTimeDialogClass
+typedef
+struct _DateTime
 {
-    GObjectClass parent_class;
-};
-
-struct _XfceDateTimeDialog
-{
-    GObject parent;
-
-    XfceDateTimeDialogPrivate *priv;
-};
-
-struct _XfceDateTimeDialogPrivate
-{
-    gboolean            ntp_changed;
-    gboolean            timezone_changed;
-    gboolean            datetime_changed;
-
-    int                 current_apply_action;
-    guint               timeout_id;
-    guint32             last_displayed_second;
-    guint32             last_displayed_day;
-
-
 /*    CcPanel parent_instance;*/
 
     GtkBuilder *builder;
@@ -135,7 +100,41 @@ struct _XfceDateTimeDialogPrivate
     GPermission *permission;
     GPermission *tz_permission;
     GSettings *location_settings;
+} DateTime;
 
+struct _XfceDateTimeDialogClass
+{
+    GObjectClass parent_class;
+};
+
+struct _XfceDateTimeDialog
+{
+    GObject parent;
+
+    XfceDateTimeDialogPrivate *priv;
+};
+
+struct _XfceDateTimeDialogPrivate
+{
+    GtkBuilder         *builder;
+    GtkWidget          *map;
+
+    GtkTreeModel       *locations;
+    GtkTreeModelFilter *city_filter;
+
+    GDateTime          *date;
+
+    Timedate1          *dtm;
+    GCancellable       *cancellable;
+
+    gboolean            ntp_changed;
+    gboolean            timezone_changed;
+    gboolean            datetime_changed;
+
+    int                 current_apply_action;
+    guint               timeout_id;
+    guint32             last_displayed_second;
+    guint32             last_displayed_day;
 };
 
 G_DEFINE_TYPE (XfceDateTimeDialog, xfce_date_time_dialog, G_TYPE_OBJECT)
@@ -145,10 +144,22 @@ G_DEFINE_TYPE (XfceDateTimeDialog, xfce_date_time_dialog, G_TYPE_OBJECT)
 
 enum
 {
+    CITY_COL_CITY,
+    CITY_COL_REGION,
+    CITY_COL_CITY_TRANSLATED,
+    CITY_COL_REGION_TRANSLATED,
+    CITY_COL_ZONE,
+    CITY_NUM_COLS
+};
+
+enum
+{
     REGION_COL_REGION,
     REGION_COL_REGION_TRANSLATED,
     REGION_NUM_COLS
 };
+
+#define W(x) (GtkWidget*) gtk_builder_get_object (priv->builder, x)
 
 enum
 {
@@ -247,8 +258,8 @@ update_apply_state (XfceDateTimeDialog *xfdtdlg)
     gboolean anychange = priv->ntp_changed ||
                          priv->timezone_changed ||
                          priv->datetime_changed;
-    /*GtkWidget *widget = W ("button-apply");
-    gtk_widget_set_sensitive (widget, anychange && priv->current_apply_action == APPLY_IDLE);*/
+    GtkWidget *widget = W ("button-apply");
+    gtk_widget_set_sensitive (widget, anychange && priv->current_apply_action == APPLY_IDLE);
 }
 
 static void
@@ -260,9 +271,9 @@ save_user_change_date (XfceDateTimeDialog *xfdtdlg)
 
     old_date = priv->date;
 
-    mon = 1 + gtk_combo_box_get_active (priv->month_combobox);
-    y = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (priv->year_spinbutton));
-    d = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (priv->day_spinbutton));
+    mon = 1 + gtk_combo_box_get_active (GTK_COMBO_BOX (W ("month-combobox")));
+    y = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (W ("year-spinbutton")));
+    d = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (W ("day-spinbutton")));
 
     priv->date = g_date_time_new_local (y, mon, d,
                                         g_date_time_get_hour (old_date),
@@ -288,18 +299,20 @@ on_user_month_year_changed (GtkWidget          *widget,
     guint mon, y;
     guint num_days;
     GtkAdjustment *adj;
- 
-    mon = 1 + gtk_combo_box_get_active (GTK_COMBO_BOX (priv->month_combobox));
-    y = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (priv->year_spinbutton));
+    GtkSpinButton *day_spin;
+
+    mon = 1 + gtk_combo_box_get_active (GTK_COMBO_BOX (W ("month-combobox")));
+    y = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (W ("year-spinbutton")));
 
     /* Check the number of days in that month */
     num_days = g_date_get_days_in_month (mon, y);
 
-    adj = GTK_ADJUSTMENT (gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (priv->day_spinbutton)));
+    day_spin = GTK_SPIN_BUTTON (W("day-spinbutton"));
+    adj = GTK_ADJUSTMENT (gtk_spin_button_get_adjustment (day_spin));
     gtk_adjustment_set_upper (adj, num_days);
 
-    if (gtk_spin_button_get_value_as_int (priv->day_spinbutton) > num_days)
-        gtk_spin_button_set_value (priv->day_spinbutton, num_days);
+    if (gtk_spin_button_get_value_as_int (day_spin) > num_days)
+        gtk_spin_button_set_value (day_spin, num_days);
 
     save_user_change_date (xfdtdlg);
 }
@@ -320,18 +333,18 @@ update_displayed_time (XfceDateTimeDialog *xfdtdlg)
         priv->last_displayed_second = locsecond;
 
         /* Update the hours label */
-        /*label = g_date_time_format (priv->date, "%H");
+        label = g_date_time_format (priv->date, "%H");
         gtk_label_set_text (GTK_LABEL (W("hours_label")), label);
-        g_free (label);*/
+        g_free (label);
 
         /* Update the minutes label */
-        /*label = g_date_time_format (priv->date, "%M");
-        gtk_label_set_text (GTK_LABEL (W("minutes_label")), label);*/
+        label = g_date_time_format (priv->date, "%M");
+        gtk_label_set_text (GTK_LABEL (W("minutes_label")), label);
 
         /* Update the seconds label */
-        /*label = g_date_time_format (priv->date, "%S");
+        label = g_date_time_format (priv->date, "%S");
         gtk_label_set_text (GTK_LABEL (W("seconds_label")), label);
-        g_free (label);*/
+        g_free (label);
     }
 }
 
@@ -342,6 +355,7 @@ update_displayed_date (XfceDateTimeDialog *xfdtdlg)
     GtkAdjustment *adjustment;
     guint num_days;
     guint32 locday;
+    GtkWidget *widget;
 
     locday = (guint32)g_date_time_get_day_of_year (priv->date) +
              ((guint32)g_date_time_get_year (priv->date)) * 366;
@@ -351,26 +365,29 @@ update_displayed_date (XfceDateTimeDialog *xfdtdlg)
         priv->last_displayed_day = locday;
 
         /* day */
-        g_signal_handlers_block_by_func (priv->day_spinbutton, on_user_day_changed, xfdtdlg);
+        widget = W ("day-spinbutton");
+        g_signal_handlers_block_by_func (widget, on_user_day_changed, xfdtdlg);
         num_days = g_date_get_days_in_month (g_date_time_get_month (priv->date),
                                              g_date_time_get_year (priv->date));
-        adjustment = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (priv->day_spinbutton));
+        adjustment = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (widget));
         gtk_adjustment_set_upper (adjustment, num_days);
-        gtk_spin_button_set_value (GTK_SPIN_BUTTON (priv->day_spinbutton),
+        gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget),
                                    (gdouble)g_date_time_get_day_of_month (priv->date));
-        g_signal_handlers_unblock_by_func (priv->day_spinbutton, on_user_day_changed, xfdtdlg);
+        g_signal_handlers_unblock_by_func (widget, on_user_day_changed, xfdtdlg);
 
         /* month */
-        g_signal_handlers_block_by_func (priv->month_combobox, on_user_month_year_changed, xfdtdlg);
-        gtk_combo_box_set_active (GTK_COMBO_BOX (priv->month_combobox),
+        widget = W ("month-combobox");
+        g_signal_handlers_block_by_func (widget, on_user_month_year_changed, xfdtdlg);
+        gtk_combo_box_set_active (GTK_COMBO_BOX (widget),
                                   g_date_time_get_month (priv->date) - 1);
-        g_signal_handlers_unblock_by_func (priv->month_combobox, on_user_month_year_changed, xfdtdlg);
+        g_signal_handlers_unblock_by_func (widget, on_user_month_year_changed, xfdtdlg);
 
         /* year */
-        g_signal_handlers_block_by_func (priv->year_spinbutton, on_user_month_year_changed, xfdtdlg);
-        gtk_spin_button_set_value (GTK_SPIN_BUTTON (priv->year_spinbutton),
+        widget = W ("year-spinbutton");
+        g_signal_handlers_block_by_func (widget, on_user_month_year_changed, xfdtdlg);
+        gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget),
                                    (gdouble)g_date_time_get_year (priv->date));
-        g_signal_handlers_unblock_by_func (priv->year_spinbutton, on_user_month_year_changed, xfdtdlg);
+        g_signal_handlers_unblock_by_func (widget, on_user_month_year_changed, xfdtdlg);
     }
 }
 
@@ -381,9 +398,9 @@ on_user_region_changed (GtkComboBox     *box,
     XfceDateTimeDialogPrivate *priv = xfdtdlg->priv;
     GtkTreeModelFilter *modelfilter;
 
-    /*modelfilter = GTK_TREE_MODEL_FILTER (W("city-modelfilter"));
+    modelfilter = GTK_TREE_MODEL_FILTER (W("city-modelfilter"));
 
-    gtk_tree_model_filter_refilter (modelfilter);*/
+    gtk_tree_model_filter_refilter (modelfilter);
     /* not a change which can be applied without further interaction */
 }
 
@@ -429,7 +446,7 @@ update_displayed_timezone (XfceDateTimeDialog *xfdtdlg)
     g_strdelimit (split[1], "_", ' ');
 
     /* update region combo */
-    /*widget = GTK_WIDGET (W ("region_combobox"));
+    widget = GTK_WIDGET (W ("region_combobox"));
     model = gtk_combo_box_get_model (GTK_COMBO_BOX (widget));
     gtk_tree_model_get_iter_first (model, &iter);
 
@@ -447,10 +464,10 @@ update_displayed_timezone (XfceDateTimeDialog *xfdtdlg)
         }
         g_free (string);
     }
-    while (gtk_tree_model_iter_next (model, &iter));*/
+    while (gtk_tree_model_iter_next (model, &iter));
 
     /* update city combo */
-    /*widget = GTK_WIDGET (W ("city_combobox"));
+    widget = GTK_WIDGET (W ("city_combobox"));
     model = gtk_combo_box_get_model (GTK_COMBO_BOX (widget));
     gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (W ("city-modelfilter")));
     gtk_tree_model_get_iter_first (model, &iter);
@@ -469,7 +486,7 @@ update_displayed_timezone (XfceDateTimeDialog *xfdtdlg)
         }
         g_free (string);
     }
-    while (gtk_tree_model_iter_next (model, &iter));*/
+    while (gtk_tree_model_iter_next (model, &iter));
 
     g_strfreev (split);
 }
@@ -485,7 +502,7 @@ on_user_map_location_changed (CcTimezoneMap      *map,
     g_debug ("location changed to %s/%s", location->country, location->zone);
 
     /* Update the combo boxes */
-    /*region_combo = W("region_combobox");
+    region_combo = W("region_combobox");
     city_combo = W("city_combobox");
 
     g_signal_handlers_block_by_func (region_combo, on_user_region_changed, xfdtdlg);
@@ -496,7 +513,7 @@ on_user_map_location_changed (CcTimezoneMap      *map,
     g_signal_handlers_unblock_by_func (region_combo, on_user_region_changed, xfdtdlg);
     g_signal_handlers_unblock_by_func (city_combo, on_user_city_changed, xfdtdlg);
 
-    priv->timezone_changed = TRUE;*/
+    priv->timezone_changed = TRUE;
     update_apply_state(xfdtdlg);
 }
 
@@ -536,8 +553,53 @@ struct get_region_data
         "\357\274\217"        /* FULLWIDTH SOLIDUS */                            \
         "/"
 
+static void
+get_regions (TzLocation             *loc,
+             struct get_region_data *data)
+{
+    gchar *zone;
+    gchar **split;
+    gchar **split_translated;
+    gchar *translated_city;
 
-/*static gboolean
+    zone = g_strdup (loc->zone);
+    g_strdelimit (zone, "_", ' ');
+    split = g_strsplit (zone, "/", 2);
+    g_free (zone);
+
+    /* Load the translation for it */
+    zone = g_strdup (dgettext (GETTEXT_PACKAGE_TIMEZONES, loc->zone));
+    g_strdelimit (zone, "_", ' ');
+    split_translated = g_regex_split_simple ("[\\x{2044}\\x{2215}\\x{29f8}\\x{ff0f}/]", zone, 0, 0);
+    g_free (zone);
+
+    if (!g_hash_table_lookup_extended (data->table, split[0], NULL, NULL))
+    {
+        g_hash_table_insert (data->table, g_strdup (split[0]),
+                             GINT_TO_POINTER (1));
+        gtk_list_store_insert_with_values (data->region_store, NULL, 0,
+                                           REGION_COL_REGION, split[0],
+                                           REGION_COL_REGION_TRANSLATED, split_translated[0], -1);
+    }
+
+    /* g_regex_split_simple() splits too much for us, and would break
+     * America/Argentina/Buenos_Aires into 3 strings, so rejoin the city part */
+    translated_city = g_strjoinv ("/", split_translated + 1);
+
+    gtk_list_store_insert_with_values (data->city_store, NULL, 0,
+                                       CITY_COL_CITY, split[1],
+                                       CITY_COL_CITY_TRANSLATED, translated_city,
+                                       CITY_COL_REGION, split[0],
+                                       CITY_COL_REGION_TRANSLATED, split_translated[0],
+                                       CITY_COL_ZONE, loc->zone,
+                                       -1);
+
+    g_free (translated_city);
+    g_strfreev (split);
+    g_strfreev (split_translated);
+}
+
+static gboolean
 city_model_filter_func (GtkTreeModel *model,
                         GtkTreeIter  *iter,
                         GtkComboBox  *combo)
@@ -567,55 +629,33 @@ city_model_filter_func (GtkTreeModel *model,
     g_free (active_region);
 
     return result;
-}*/
-
-static char *
-translated_city_name (TzLocation *loc)
-{
-  g_autofree gchar *zone_translated = NULL;
-  g_auto(GStrv) split_translated = NULL;
-  g_autofree gchar *country = NULL;
-  gchar *name;
-  gint length;
-
-  /* Load the translation for it */
-  zone_translated = g_strdup (dgettext (GETTEXT_PACKAGE_TIMEZONES, loc->zone));
-  g_strdelimit (zone_translated, "_", ' ');
-  split_translated = g_regex_split_simple ("[\\x{2044}\\x{2215}\\x{29f8}\\x{ff0f}/]",
-                                           zone_translated,
-                                           0, 0);
-
-  length = g_strv_length (split_translated);
-
-  country = gnome_get_country_from_code (loc->country, NULL);
-  /* Translators: "city, country" */
-  name = g_strdup_printf (C_("timezone loc", "%s, %s"),
-                          split_translated[length-1],
-                          country);
-
-  return name;
 }
 
-static void
-load_cities (TzLocation   *loc,
-             GtkListStore *city_store)
-{
-  g_autofree gchar *human_readable = NULL;
-
-  human_readable = translated_city_name (loc);
-  gtk_list_store_insert_with_values (city_store, NULL, 0,
-                                     CITY_COL_CITY_HUMAN_READABLE, human_readable,
-                                     CITY_COL_ZONE, loc->zone,
-                                     -1);
-}
 
 static void
-load_regions_model (GtkListStore *cities)
+load_regions_model (GtkListStore *regions, GtkListStore *cities)
 {
-  g_autoptr(TzDB) db = NULL;
+    struct get_region_data data;
+    TzDB *db;
+    GHashTable *table;
 
-  db = tz_load_db ();
-  g_ptr_array_foreach (db->locations, (GFunc) load_cities, cities);
+    db = tz_load_db ();
+    table = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+
+    data.table = table;
+    data.region_store = regions;
+    data.city_store = cities;
+
+    g_ptr_array_foreach (db->locations, (GFunc) get_regions, &data);
+
+    g_hash_table_destroy (table);
+
+    tz_db_free (db);
+
+    /* sort the models */
+    gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (regions),
+                                          REGION_COL_REGION_TRANSLATED,
+                                          GTK_SORT_ASCENDING);
 }
 
 static void
@@ -624,8 +664,8 @@ update_datetime_widget_sensivity (XfceDateTimeDialog *xfdtdlg,
 {
     XfceDateTimeDialogPrivate *priv = xfdtdlg->priv;
 
-    /*gtk_widget_set_sensitive (W("table1"), sensitive);
-    gtk_widget_set_sensitive (W("table2"), sensitive);*/
+    gtk_widget_set_sensitive (W("table1"), sensitive);
+    gtk_widget_set_sensitive (W("table2"), sensitive);
 }
 
 static void
@@ -675,7 +715,7 @@ on_user_ntp_changed (GObject            *gobject,
     priv->ntp_changed = TRUE;
     update_apply_state(xfdtdlg);
 
-    GtkToggleButton* button = GTK_TOGGLE_BUTTON (priv->network_time_switch);
+    GtkToggleButton* button = GTK_TOGGLE_BUTTON (W ("network_time_switch"));
     update_datetime_widget_sensivity (xfdtdlg,
                                       !gtk_toggle_button_get_active (button));
 }
@@ -697,13 +737,15 @@ update_displayed_ntp (XfceDateTimeDialog *xfdtdlg)
             using_ntp = timedate1_get_ntp (priv->dtm);
         }
     }
+    switch_widget = W("network_time_switch");
+
     /* enable ntp only if properly installed */
-    gtk_widget_set_sensitive (priv->network_time_switch, can_ftp);
+    gtk_widget_set_sensitive (switch_widget, can_ftp);
 
     /* avoid our own feedback on changing button state */
-    g_signal_handlers_block_by_func (priv->network_time_switch, on_user_ntp_changed, xfdtdlg);
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->network_time_switch), using_ntp);
-    g_signal_handlers_unblock_by_func (priv->network_time_switch, on_user_ntp_changed, xfdtdlg);
+    g_signal_handlers_block_by_func (switch_widget, on_user_ntp_changed, xfdtdlg);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (switch_widget), using_ntp);
+    g_signal_handlers_unblock_by_func (switch_widget, on_user_ntp_changed, xfdtdlg);
 
     update_datetime_widget_sensivity (xfdtdlg, !using_ntp);
 }
@@ -745,7 +787,7 @@ on_system_timezone_changed (XfceDateTimeDialog *xfdtdlg)
     XfceDateTimeDialogPrivate *priv = xfdtdlg->priv;
     GtkWidget *region_combo, *city_combo;
 
-/*    region_combo = W("region_combobox");
+    region_combo = W("region_combobox");
     city_combo = W("city_combobox");
 
     g_signal_handlers_block_by_func (region_combo, on_user_region_changed, xfdtdlg);
@@ -758,7 +800,7 @@ on_system_timezone_changed (XfceDateTimeDialog *xfdtdlg)
     g_signal_handlers_unblock_by_func (city_combo, on_user_city_changed, xfdtdlg);
     g_signal_handlers_unblock_by_func (priv->map, on_user_map_location_changed, xfdtdlg);
 
-    update_timezone_changed_final (xfdtdlg);*/
+    update_timezone_changed_final (xfdtdlg);
 }
 
 static void
@@ -869,7 +911,7 @@ callback_set_using_ntp (GObject      *source,
         /* in case of ntp reenable, user's datetime changes must be ignored
          * note that we cannot use timedate1_get_ntp because it reports old value
          */
-        if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->network_time_switch)))
+        if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (W ("network_time_switch"))))
             priv->datetime_changed = FALSE;
     }
     else
@@ -930,7 +972,7 @@ start_next_apply_action(XfceDateTimeDialog *xfdtdlg)
     case APPLY_NTP:
         if (priv->ntp_changed)
         {
-            using_ntp = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->network_time_switch));
+            using_ntp = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (W ("network_time_switch")));
             timedate1_call_set_ntp (priv->dtm,
                                     using_ntp,
                                     TRUE,
@@ -995,7 +1037,7 @@ start_next_apply_action(XfceDateTimeDialog *xfdtdlg)
     update_apply_state(xfdtdlg);
     update_datetime_widget_sensivity (xfdtdlg,
                                       priv->current_apply_action == APPLY_IDLE &&
-                                        !gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->network_time_switch)));
+                                        !gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (W ("network_time_switch"))));
 }
 
 static void
@@ -1008,303 +1050,111 @@ on_user_apply (GtkButton          *button,
     start_next_apply_action(xfdtdlg);
 }
 
-/* Dummy/TODO handlers */
-static gboolean
-format_hours_combobox (GtkSpinButton   *spin,
-                       XfceDateTimeDialog *panel)
-{
-  GtkAdjustment *adjustment;
-/*  g_autofree gchar *text = NULL;
-  int hour;
-  gboolean use_ampm;
-
-  if (panel->clock_format == G_DESKTOP_CLOCK_FORMAT_12H)
-    use_ampm = TRUE;
-  else
-    use_ampm = FALSE;
-
-  adjustment = gtk_spin_button_get_adjustment (spin);
-  hour = (int)gtk_adjustment_get_value (adjustment);
-  if (use_ampm)
-    text = g_strdup_printf ("%d", hour);
-  else
-    text = g_strdup_printf ("%02d", hour);
-  gtk_entry_set_text (GTK_ENTRY (spin), text);*/
-
-  return TRUE;
-}
-
-static void
-change_time (XfceDateTimeDialog *self)
-{
-  /*guint h, m;
-  g_autoptr(GDateTime) old_date = NULL;
-
-  h = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (self->h_spinbutton));
-  m = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (self->m_spinbutton));
-
-  if (self->clock_format == G_DESKTOP_CLOCK_FORMAT_12H)
-    {
-      gboolean is_pm_time;
-      GtkWidget *visible_child;
-
-      visible_child = gtk_stack_get_visible_child (GTK_STACK (self->am_pm_stack));
-      if (visible_child == self->pm_label)
-        is_pm_time = TRUE;
-      else
-        is_pm_time = FALSE;
-
-      if (h == 12)
-        h = 0;
-      if (is_pm_time)
-        h += 12;
-    }
-
-  old_date = self->date;
-  self->date = g_date_time_new_local (g_date_time_get_year (old_date),
-                                      g_date_time_get_month (old_date),
-                                      g_date_time_get_day_of_month (old_date),
-                                      h, m,
-                                      g_date_time_get_second (old_date));
-
-  update_time (self);
-  queue_set_datetime (self);*/
-}
-
-static void
-am_pm_stack_visible_child_changed_cb (XfceDateTimeDialog *self)
-{
-/*  AtkObject *am_pm_button_accessible;
-  GtkWidget *visible_label;
-  const gchar *visible_text;
-
-  am_pm_button_accessible = gtk_widget_get_accessible (self->am_pm_button);
-  if (am_pm_button_accessible == NULL)
-    return;
-
-  visible_label = gtk_stack_get_visible_child (GTK_STACK (self->am_pm_stack));
-  visible_text = gtk_label_get_text (GTK_LABEL (visible_label));
-  atk_object_set_name (am_pm_button_accessible, visible_text);*/
-}
-
-static gboolean
-am_pm_button_clicked (GtkWidget *button,
-                      XfceDateTimeDialog *self)
-{
-  /*GtkWidget *visible_child;
-
-  visible_child = gtk_stack_get_visible_child (GTK_STACK (self->am_pm_stack));
-  if (visible_child == self->am_label)
-    gtk_stack_set_visible_child (GTK_STACK (self->am_pm_stack), self->pm_label);
-  else
-    gtk_stack_set_visible_child (GTK_STACK (self->am_pm_stack), self->am_label);
-
-  change_time (self);*/
-
-  return TRUE;
-}
-
-static gboolean
-keynav_failed (GtkWidget        *listbox,
-               GtkDirectionType  direction,
-               XfceDateTimeDialog  *self)
-{
-  GList *item, *listboxes;
-
-  /* Find the listbox in the list of GtkListBoxes */
-  /*if (direction == GTK_DIR_DOWN)
-    listboxes = self->listboxes;
-  else
-    listboxes = self->listboxes_reverse;
-
-  item = g_list_find (listboxes, listbox);
-  g_assert (item);
-  if (item->next)
-    {
-      gtk_widget_child_focus (GTK_WIDGET (item->next->data), direction);
-      return TRUE;
-    }*/
-
-  return FALSE;
-}
-
-static gboolean
-format_minutes_combobox (GtkSpinButton *spin,
-                         gpointer       data)
-{
-  /*GtkAdjustment *adjustment;
-  g_autofree gchar *text = NULL;
-  int value;
-
-  adjustment = gtk_spin_button_get_adjustment (spin);
-  value = (int)gtk_adjustment_get_value (adjustment);
-  text = g_strdup_printf ("%02d", value);
-  gtk_entry_set_text (GTK_ENTRY (spin), text);*/
-
-  return TRUE;
-}
-
-static void
-change_clock_settings (GObject         *gobject,
-                       GParamSpec      *pspec,
-                       XfceDateTimeDialog *self)
-{
-  /*GDesktopClockFormat value;
-  const char *active_id;
-
-  g_signal_handlers_block_by_func (self->clock_settings, clock_settings_changed_cb,
-                                   self);
-
-  active_id = gtk_combo_box_get_active_id (GTK_COMBO_BOX (self->format_combobox));
-  if (!g_strcmp0 (active_id, "24h"))
-    value = G_DESKTOP_CLOCK_FORMAT_24H;
-  else
-    value = G_DESKTOP_CLOCK_FORMAT_12H;
-
-  g_settings_set_enum (self->clock_settings, CLOCK_FORMAT_KEY, value);
-  g_settings_set_enum (self->filechooser_settings, CLOCK_FORMAT_KEY, value);
-  self->clock_format = value;
-
-  update_time (self);
-
-  g_signal_handlers_unblock_by_func (self->clock_settings, clock_settings_changed_cb,
-                                     self);*/
-}
-
-static void
-list_box_row_activated (GtkListBox      *listbox,
-                        GtkListBoxRow   *row,
-                        XfceDateTimeDialog *self)
-
-{
-  /*gtk_list_box_select_row (listbox, NULL);
-
-  if (row == GTK_LIST_BOX_ROW (self->auto_datetime_row))
-    {
-      toggle_switch (self->network_time_switch);
-    }
-  else if (row == GTK_LIST_BOX_ROW (self->auto_timezone_row))
-    {
-      toggle_switch (self->auto_timezone_switch);
-    }
-  else if (row == GTK_LIST_BOX_ROW (self->datetime_button))
-    {
-      run_dialog (self, self->datetime_dialog);
-    }
-  else if (row == GTK_LIST_BOX_ROW (self->timezone_button))
-    {
-      run_dialog (self, self->timezone_dialog);
-    }*/
-}
-
-
-
 void
 xfce_date_time_dialog_setup (GObject *dlgobj, GtkBuilder *builder)
 {
     XfceDateTimeDialog *xfdtdlg;
     XfceDateTimeDialogPrivate *priv;
-    /*char *buttons[] = { "hour_up_button", "hour_down_button",
+    gchar *objects[] = { "datetime-panel", "region-liststore",
+                         "city-liststore", "month-liststore",
+                         "city-modelfilter", "city-modelsort", NULL };
+    char *buttons[] = { "hour_up_button", "hour_down_button",
                         "min_up_button",  "min_down_button",
-                        "second_up_button",  "second_down_button" };*/
+                        "second_up_button",  "second_down_button" };
     GtkWidget *widget;
     GError *err = NULL;
+    GtkTreeModelFilter *city_modelfilter;
+    GtkTreeModelSort *city_modelsort;
+    GtkAdjustment *adjustment;
     guint i, num_days;
     int ret;
-    GtkAdjustment *adjustment;
 
     xfdtdlg = XFCE_DATE_TIME_DIALOG(dlgobj);
     priv = XFCE_DATE_TIME_DIALOG_PRIVATE (xfdtdlg);
     priv->builder = builder;
-    
-    gtk_builder_add_from_resource (priv->builder, "/org/gnome/control-center/datetime/big.ui", NULL);
-    priv->date_grid = GTK_WIDGET (gtk_builder_get_object (priv->builder, "date_grid"));
-    priv->day_spinbutton = GTK_WIDGET (gtk_builder_get_object (priv->builder, "day_spinbutton"));
-    priv->month_combobox = GTK_WIDGET (gtk_builder_get_object (priv->builder, "month_combobox"));
-    gtk_combo_box_set_model (GTK_COMBO_BOX (priv->month_combobox), GTK_TREE_MODEL (priv->month_liststore));
-    priv->year_spinbutton = GTK_WIDGET (gtk_builder_get_object (priv->builder, "year_spinbutton"));
-
-    gtk_box_pack_end (GTK_BOX (priv->time_box), priv->date_grid, FALSE, TRUE, 0);
 
     /* set up apply-button */
-    /*g_signal_connect (W ("button-apply"), "clicked",
+    g_signal_connect (W ("button-apply"), "clicked",
                       G_CALLBACK (on_user_apply), xfdtdlg);
-    update_apply_state (xfdtdlg);*/
+    update_apply_state (xfdtdlg);
 
     /* set up network time button */
-    priv->network_time_switch = GTK_WIDGET (gtk_builder_get_object (priv->builder, "network_time_switch"));
-    g_signal_connect (priv->network_time_switch, "toggled",
+    g_signal_connect (W ("network_time_switch"), "toggled",
                       G_CALLBACK (on_user_ntp_changed), xfdtdlg);
     update_displayed_ntp (xfdtdlg);
 
     /* set up time editing widgets */
-    /*for (i = 0; i < G_N_ELEMENTS (buttons); i++)
+    for (i = 0; i < G_N_ELEMENTS (buttons); i++)
     {
         g_signal_connect (W (buttons[i]), "clicked",
                           G_CALLBACK (on_user_time_changed), xfdtdlg);
-    }*/
+    }
 
     /* set up date editing widgets */
     priv->date = g_date_time_new_now_local ();
 
     /* Force the direction for the time, so that the time
     * is presented correctly for RTL languages */
-    /*gtk_widget_set_direction (W ("table2"), GTK_TEXT_DIR_LTR);*/
+    gtk_widget_set_direction (W ("table2"), GTK_TEXT_DIR_LTR);
 
-    g_signal_connect (priv->month_combobox, "changed",
+    g_signal_connect (G_OBJECT (W ("month-combobox")), "changed",
                       G_CALLBACK (on_user_month_year_changed), xfdtdlg);
 
     num_days = g_date_get_days_in_month (g_date_time_get_month (priv->date),
                                          g_date_time_get_year (priv->date));
     adjustment = GTK_ADJUSTMENT (gtk_adjustment_new (g_date_time_get_day_of_month (priv->date), 1,
                                                      num_days + 1, 1, 10, 0));
-    gtk_spin_button_set_adjustment (GTK_SPIN_BUTTON (priv->day_spinbutton),
+    gtk_spin_button_set_adjustment (GTK_SPIN_BUTTON (W ("day-spinbutton")),
                                     adjustment);
-    g_signal_connect (G_OBJECT (priv->day_spinbutton), "value-changed",
+    g_signal_connect (G_OBJECT (W("day-spinbutton")), "value-changed",
                       G_CALLBACK (on_user_day_changed), xfdtdlg);
 
     adjustment = GTK_ADJUSTMENT (gtk_adjustment_new (g_date_time_get_year (priv->date),
                                                      0.0, G_MAXDOUBLE, 1,
                                                      10, 0));
-    gtk_spin_button_set_adjustment (GTK_SPIN_BUTTON (priv->year_spinbutton),
+    gtk_spin_button_set_adjustment (GTK_SPIN_BUTTON (W("year-spinbutton")),
                                     adjustment);
-    g_signal_connect (G_OBJECT (priv->year_spinbutton), "value-changed",
+    g_signal_connect (G_OBJECT (W("year-spinbutton")), "value-changed",
                       G_CALLBACK (on_user_month_year_changed), xfdtdlg);
 
     /* set up timezone map */
     priv->map = widget = GTK_WIDGET (cc_timezone_map_new ());
     gtk_widget_show (widget);
 
-    priv->aspectmap = GTK_WIDGET (gtk_builder_get_object (priv->builder, "aspectmap"));
-    gtk_container_add (GTK_CONTAINER (priv->aspectmap),
+    gtk_container_add (GTK_CONTAINER (W ("aspectmap")),
                        widget);
 
     update_displayed_date (xfdtdlg);
     update_displayed_time (xfdtdlg);
     update_apply_state (xfdtdlg);
 
-    priv->city_liststore = GTK_WIDGET (gtk_builder_get_object (priv->builder, "city_liststore"));
-    load_regions_model (GTK_LIST_STORE (priv->city_liststore));
+    priv->locations = GTK_TREE_MODEL (W ("region-liststore"));
 
-    priv->city_modelsort = GTK_WIDGET (gtk_builder_get_object (priv->builder, "city_modelsort"));
-    gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (priv->city_modelsort), CITY_COL_CITY_HUMAN_READABLE,
+    load_regions_model (GTK_LIST_STORE (priv->locations),
+                        GTK_LIST_STORE (W ("city-liststore")));
+
+    city_modelfilter = GTK_TREE_MODEL_FILTER (W ("city-modelfilter"));
+
+    city_modelsort = GTK_TREE_MODEL_SORT (W ("city-modelsort"));
+    gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (city_modelsort), 
+										  CITY_COL_CITY_TRANSLATED,
                                           GTK_SORT_ASCENDING);
 
-/*    widget = GTK_WIDGET (W ("region_combobox"));
+    widget = GTK_WIDGET (W ("region_combobox"));
     gtk_tree_model_filter_set_visible_func (city_modelfilter,
                                             (GtkTreeModelFilterVisibleFunc) city_model_filter_func,
                                             widget,
-                                            NULL);*/
+                                            NULL);
 
     /* After the initial setup, so we can be sure that
     * the model is filled up */
     get_initial_timezone (xfdtdlg);
 
-    /*widget = GTK_WIDGET (W ("region_combobox"));
+    widget = GTK_WIDGET (W ("region_combobox"));
     g_signal_connect (widget, "changed", G_CALLBACK (on_user_region_changed), xfdtdlg);
 
     widget = GTK_WIDGET (W ("city_combobox"));
-    g_signal_connect (widget, "changed", G_CALLBACK (on_user_city_changed), xfdtdlg);*/
+    g_signal_connect (widget, "changed", G_CALLBACK (on_user_city_changed), xfdtdlg);
 
     g_signal_connect (priv->map, "location-changed",
                       G_CALLBACK (on_user_map_location_changed), xfdtdlg);

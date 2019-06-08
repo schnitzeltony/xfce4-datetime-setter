@@ -39,7 +39,6 @@
 #include <libxfce4ui/libxfce4ui.h>
 #include <libxfce4util/libxfce4util.h>
 
-#include "cc-datetime-resources.h"
 #include "datetime-dialog.h"
 
 static gint opt_socket_id = 0;
@@ -111,8 +110,7 @@ main (gint argc, gchar **argv)
     if (xfce_titled_dialog_get_type () == 0)
         return EXIT_FAILURE;
 
-    /* load the gtk user interface */
-    g_resources_register (cc_datetime_get_resource ());
+    /* load the gtk user interface file*/
     builder = gtk_builder_new_from_resource ("/org/gnome/control-center/datetime/cc-datetime-panel.ui");
     dlgobj = g_object_new (XFCE_TYPE_DATE_TIME_DIALOG, NULL);
     xfce_date_time_dialog_setup (dlgobj, builder);
@@ -120,7 +118,7 @@ main (gint argc, gchar **argv)
     if (G_UNLIKELY (opt_socket_id == 0))
     {
         /* build the dialog */
-        dialog = gtk_builder_get_object (builder, "datetime_dialog");
+        dialog = gtk_builder_get_object (builder, "dialog");
         g_signal_connect (dialog, "response",
                           G_CALLBACK (datetime_settings_dialog_response), NULL);
         gtk_window_present (GTK_WINDOW (dialog));
