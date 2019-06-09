@@ -509,7 +509,6 @@ get_regions (TzLocation             *loc,
     split_translated = g_regex_split_simple ("[\\x{2044}\\x{2215}\\x{29f8}\\x{ff0f}/]", zone, 0, 0);
     g_free (zone);
 
-    /* TODO
     if (!g_hash_table_lookup_extended (data->table, split[0], NULL, NULL))
     {
         g_hash_table_insert (data->table, g_strdup (split[0]),
@@ -517,11 +516,10 @@ get_regions (TzLocation             *loc,
         gtk_list_store_insert_with_values (data->region_store, NULL, 0,
                                            REGION_COL_REGION, split[0],
                                            REGION_COL_REGION_TRANSLATED, split_translated[0], -1);
-    }*/
+    }
 
     /* g_regex_split_simple() splits too much for us, and would break
      * America/Argentina/Buenos_Aires into 3 strings, so rejoin the city part */
-    /* TODO
     translated_city = g_strjoinv ("/", split_translated + 1);
 
     gtk_list_store_insert_with_values (data->city_store, NULL, 0,
@@ -530,7 +528,7 @@ get_regions (TzLocation             *loc,
                                        CITY_COL_REGION, split[0],
                                        CITY_COL_REGION_TRANSLATED, split_translated[0],
                                        CITY_COL_ZONE, loc->zone,
-                                       -1);*/
+                                       -1);
 
     g_free (translated_city);
     g_strfreev (split);
@@ -1065,9 +1063,8 @@ xfce_date_time_dialog_setup (GObject *dlgobj, GtkBuilder *builder)
 
     priv->locations = GTK_TREE_MODEL (W ("region_liststore"));
 
-    /* TODO
     load_regions_model (GTK_LIST_STORE (priv->locations),
-                        GTK_LIST_STORE (W ("city-liststore")));
+                        GTK_LIST_STORE (W ("city_liststore")));
 
     city_modelfilter = GTK_TREE_MODEL_FILTER (W ("city_modelfilter"));
 
@@ -1081,7 +1078,6 @@ xfce_date_time_dialog_setup (GObject *dlgobj, GtkBuilder *builder)
                                             (GtkTreeModelFilterVisibleFunc) city_model_filter_func,
                                             widget,
                                             NULL);
-    */
 
     /* After the initial setup, so we can be sure that
     * the model is filled up */
