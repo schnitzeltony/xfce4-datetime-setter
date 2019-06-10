@@ -9076,11 +9076,11 @@ msgstr "Sons sistèma"
 #~ msgid "Ctrl+Caps"
 #~ msgstr "Ctrl+Verr.Maj."
 
-#~ msgid "_Region:"
-#~ msgstr "_Region :"
+msgid "_Region:"
+msgstr "_Region :"
 
-#~ msgid "_City:"
-#~ msgstr "_Vila :"
+msgid "_City:"
+msgstr "_Vila :"
 
 #~ msgid "_Network Time"
 #~ msgstr "_Ora ret"

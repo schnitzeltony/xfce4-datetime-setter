@@ -9055,14 +9055,14 @@ msgstr "Sunete de sistem"
 #~ msgid "China"
 #~ msgstr "China"
 
-#~ msgid "_Region:"
-#~ msgstr "_Regiune"
+msgid "_Region:"
+msgstr "_Regiune"
 
-#~ msgid "_City:"
-#~ msgstr "_Oraș:"
+msgid "_City:"
+msgstr "_Oraș:"
 
-#~ msgid "_Network Time"
-#~ msgstr "Cea_s configurat de rețea"
+msgid "_Network Time"
+msgstr "Cea_s configurat de rețea"
 
 #~ msgid "Set the time one hour ahead."
 #~ msgstr "Configurați ceasul cu o oră în avans."

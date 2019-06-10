@@ -1391,6 +1391,15 @@ msgstr "24 órás"
 msgid "AM / PM"
 msgstr "12 órás"
 
+msgid "_Region:"
+msgstr "_Régió:"
+
+msgid "_City:"
+msgstr "_Város:"
+
+msgid "_Network Time"
+msgstr "_Hálózati idő"
+
 #: panels/datetime/gnome-datetime-panel.desktop.in.in:4
 msgid "Change the date and time, including time zone"
 msgstr "Dátum, idő és időzóna módosítása"

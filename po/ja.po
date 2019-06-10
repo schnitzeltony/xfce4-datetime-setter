@@ -1419,6 +1419,15 @@ msgstr "24時制"
 msgid "AM / PM"
 msgstr "午前/午後"
 
+msgid "_Region:"
+msgstr "地域(_R):"
+
+msgid "_City:"
+msgstr "都市(_C):"
+
+msgid "_Network Time"
+msgstr "ネットワーク時刻(_N)"
+
 #: panels/datetime/gnome-datetime-panel.desktop.in.in:4
 msgid "Change the date and time, including time zone"
 msgstr "日付、時刻、タイムゾーンを変更します。"

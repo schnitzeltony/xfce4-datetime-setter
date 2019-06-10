@@ -9313,14 +9313,14 @@ msgstr "Жүйелік дыбыстар"
 #~ msgid "Ctrl+Caps"
 #~ msgstr "Ctrl+Caps"
 
-#~ msgid "_Region:"
-#~ msgstr "А_ймақ:"
+msgid "_Region:"
+msgstr "А_ймақ:"
 
-#~ msgid "_City:"
-#~ msgstr "Қа_ла:"
+msgid "_City:"
+msgstr "Қа_ла:"
 
-#~ msgid "_Network Time"
-#~ msgstr "Же_лілік уақыт"
+msgid "_Network Time"
+msgstr "Же_лілік уақыт"
 
 #~ msgid "AM/PM"
 #~ msgstr "AM/PM"

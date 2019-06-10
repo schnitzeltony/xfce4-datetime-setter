@@ -7504,14 +7504,14 @@ msgstr "वरीयताएँ;सेटिंग्स;"
 #~ msgid "Alt+Caps"
 #~ msgstr "आल्ट+कैप्स"
 
-#~ msgid "_Region:"
-#~ msgstr "क्षेत्र: (_R)"
+msgid "_Region:"
+msgstr "क्षेत्र: (_R)"
 
-#~ msgid "_City:"
-#~ msgstr "शहर: (_C)"
+msgid "_City:"
+msgstr "शहर: (_C)"
 
-#~ msgid "_Network Time"
-#~ msgstr "संजाल समय (_N)"
+msgid "_Network Time"
+msgstr "संजाल समय (_N)"
 
 #~ msgid ":"
 #~ msgstr ":"

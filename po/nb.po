@@ -1068,6 +1068,15 @@ msgstr "24-timer"
 msgid "AM / PM"
 msgstr "AM / PM"
 
+msgid "_Region:"
+msgstr "_Region:"
+
+msgid "_City:"
+msgstr "_By:"
+
+msgid "_Network Time"
+msgstr "_Nettverkstid"
+
 #: ../panels/datetime/gnome-datetime-panel.desktop.in.in.h:3
 msgid "Change the date and time, including time zone"
 msgstr "Endra dato og klokkeslett - inklusive tidssone"

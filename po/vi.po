@@ -1084,6 +1084,15 @@ msgstr "24-giờ"
 msgid "AM / PM"
 msgstr "SA / CH"
 
+msgid "_Region:"
+msgstr "_Vùng:"
+
+msgid "_City:"
+msgstr "Thành _phố:"
+
+msgid "_Network Time"
+msgstr "Thời gian _mạng"
+
 #: panels/datetime/gnome-datetime-panel.desktop.in.in:4
 msgid "Change the date and time, including time zone"
 msgstr "Thay đổi ngày giờ hay múi giờ"

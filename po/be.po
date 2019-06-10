@@ -1092,6 +1092,15 @@ msgstr "24 гадзіны"
 msgid "AM / PM"
 msgstr "AM / PM"
 
+msgid "_Region:"
+msgstr "_Рэгіён:"
+
+msgid "_City:"
+msgstr "_Горад:"
+
+msgid "_Network Time"
+msgstr "_Сеціўная настройка часу"
+
 #: panels/datetime/gnome-datetime-panel.desktop.in.in:4
 msgid "Change the date and time, including time zone"
 msgstr "Настройка даты і часу, а таксама часавага пояса"

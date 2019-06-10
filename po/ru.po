@@ -1399,6 +1399,15 @@ msgstr "24-часовой"
 msgid "AM / PM"
 msgstr "12-часовой"
 
+msgid "_Region:"
+msgstr "_Регион:"
+
+msgid "_City:"
+msgstr "_Город:"
+
+msgid "_Network Time"
+msgstr "_Сетевое время"
+
 #: panels/datetime/gnome-datetime-panel.desktop.in.in:4
 msgid "Change the date and time, including time zone"
 msgstr "Изменить дату и время, включая часовой пояс"

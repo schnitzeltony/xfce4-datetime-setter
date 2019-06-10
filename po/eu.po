@@ -1367,6 +1367,15 @@ msgstr "24 ordu"
 msgid "AM / PM"
 msgstr "AM / PM"
 
+msgid "_Region:"
+msgstr "_Eskualdea:"
+
+msgid "_City:"
+msgstr "_Herria:"
+
+msgid "_Network Time"
+msgstr "_Sareko ordua"
+
 #: panels/datetime/gnome-datetime-panel.desktop.in.in:4
 msgid "Change the date and time, including time zone"
 msgstr "Aldatu data eta ordua, ordu-zona barne"

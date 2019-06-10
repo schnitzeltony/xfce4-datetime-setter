@@ -1405,6 +1405,15 @@ msgstr "24 saat"
 msgid "AM / PM"
 msgstr "ÖÖ / ÖS"
 
+msgid "_Region:"
+msgstr "_Bölge:"
+
+msgid "_City:"
+msgstr "_Şehir:"
+
+msgid "_Network Time"
+msgstr "_Ağ Saati"
+
 #: panels/datetime/gnome-datetime-panel.desktop.in.in:4
 msgid "Change the date and time, including time zone"
 msgstr "Tarihi, saati ve saat dilimini değiştir"

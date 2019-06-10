@@ -1382,6 +1382,15 @@ msgstr "24-jam"
 msgid "AM / PM"
 msgstr "AM / PM"
 
+msgid "_Region:"
+msgstr "_Wilayah:"
+
+msgid "_City:"
+msgstr "_Kota:"
+
+msgid "_Network Time"
+msgstr "Waktu Jari_ngan"
+
 #: panels/datetime/gnome-datetime-panel.desktop.in.in:4
 msgid "Change the date and time, including time zone"
 msgstr "Ubah tanggal dan waktu, termasuk zona waktu"

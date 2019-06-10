@@ -7379,14 +7379,14 @@ msgstr "Хусусиятҳо;Танзимот;"
 #~ msgid "_Detect Displays"
 #~ msgstr "_Пайдо кардани дисплейҳо"
 
-#~ msgid "_Region:"
-#~ msgstr "_Минтақа:"
+msgid "_Region:"
+msgstr "_Минтақа:"
 
-#~ msgid "_City:"
-#~ msgstr "_Шаҳр:"
+msgid "_City:"
+msgstr "_Шаҳр:"
 
-#~ msgid "_Network Time"
-#~ msgstr "_Вақти шабака"
+msgid "_Network Time"
+msgstr "_Вақти шабака"
 
 #~ msgid ":"
 #~ msgstr ":"

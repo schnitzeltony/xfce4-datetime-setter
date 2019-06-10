@@ -9220,14 +9220,14 @@ msgstr "Sistemsonoj"
 #~ msgid "Unspecified"
 #~ msgstr "Nedifinite"
 
-#~ msgid "_Region:"
-#~ msgstr "_Regiono:"
+msgid "_Region:"
+msgstr "_Regiono:"
 
-#~ msgid "_City:"
-#~ msgstr "_Urbo:"
+msgid "_City:"
+msgstr "_Urbo:"
 
-#~ msgid "_Network Time"
-#~ msgstr "_Rethoro"
+msgid "_Network Time"
+msgstr "_Rethoro"
 
 #~ msgid "Set the time one hour ahead."
 #~ msgstr "Aldoni unu horon al tempo."

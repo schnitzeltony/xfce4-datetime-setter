@@ -8615,14 +8615,14 @@ msgstr "系統音效"
 #~ msgid "Estimated battery capacity: %s"
 #~ msgstr "預估電池電力：%s"
 
-#~ msgid "_Region:"
-#~ msgstr "區域(_R)："
+msgid "_Region:"
+msgstr "區域(_R)："
 
-#~ msgid "_City:"
-#~ msgstr "城市(_C)："
+msgid "_City:"
+msgstr "城市(_C)："
 
-#~ msgid "_Network Time"
-#~ msgstr "網路時刻(_N)"
+msgid "_Network Time"
+msgstr "網路時刻(_N)"
 
 #~ msgid "Set the time one hour ahead."
 #~ msgstr "將時刻延後一小時。"

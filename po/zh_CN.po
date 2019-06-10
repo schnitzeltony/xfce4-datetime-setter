@@ -1377,6 +1377,15 @@ msgstr "24 小时"
 msgid "AM / PM"
 msgstr "上午/下午"
 
+msgid "_Region:"
+msgstr "地区(_R)："
+
+msgid "_City:"
+msgstr "城市(_C)："
+
+msgid "_Network Time"
+msgstr "网络时间(_N)"
+
 #: panels/datetime/gnome-datetime-panel.desktop.in.in:4
 msgid "Change the date and time, including time zone"
 msgstr "改变日期、时间和时区"

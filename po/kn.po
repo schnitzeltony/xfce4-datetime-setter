@@ -7310,14 +7310,14 @@ msgstr "ಆದ್ಯತೆಗಳು;ಸಿದ್ಧತೆಗಳು;"
 #~ msgid "Alt+Caps"
 #~ msgstr "Alt+ಕ್ಯಾಪ್ಸ್"
 
-#~ msgid "_Region:"
-#~ msgstr "ಪ್ರದೇಶ (_R):"
+msgid "_Region:"
+msgstr "ಪ್ರದೇಶ (_R):"
 
-#~ msgid "_City:"
-#~ msgstr "ಊರು (_C):"
+msgid "_City:"
+msgstr "ಊರು (_C):"
 
-#~ msgid "_Network Time"
-#~ msgstr "ಜಾಲಬಂಧ ಸಮಯ (_N)"
+msgid "_Network Time"
+msgstr "ಜಾಲಬಂಧ ಸಮಯ (_N)"
 
 #~ msgid ":"
 #~ msgstr ":"

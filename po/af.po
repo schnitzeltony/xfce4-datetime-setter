@@ -8484,14 +8484,14 @@ msgstr "Stelselklanke"
 #~ msgid "Switch between AM and PM."
 #~ msgstr "Wissel tussen v.m. en n.m."
 
-#~ msgid "_City:"
-#~ msgstr "_Stad:"
+msgid "_City:"
+msgstr "_Stad:"
 
-#~ msgid "_Network Time"
-#~ msgstr "_Netwerktyd"
+msgid "_Network Time"
+msgstr "_Netwerktyd"
 
-#~ msgid "_Region:"
-#~ msgstr "St_reek:"
+msgid "_Region:"
+msgstr "St_reek:"
 
 #~ msgid "Date and Time preferences panel"
 #~ msgstr "Voorkeurepaneel vir datum en tyd"

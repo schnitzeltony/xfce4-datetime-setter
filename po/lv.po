@@ -1434,6 +1434,15 @@ msgstr "24 stundu"
 msgid "AM / PM"
 msgstr "AM / PM"
 
+msgid "_Region:"
+msgstr "_Reģions:"
+
+msgid "_City:"
+msgstr "_Pilsēta:"
+
+msgid "_Network Time"
+msgstr "_Tīkla laiks"
+
 #: panels/datetime/gnome-datetime-panel.desktop.in.in:4
 msgid "Change the date and time, including time zone"
 msgstr "Mainīt datumu un laiku, tai skaitā laika joslas"

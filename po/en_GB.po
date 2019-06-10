@@ -9325,14 +9325,14 @@ msgstr "System Sounds"
 #~ msgid "Ctrl+Caps"
 #~ msgstr "Ctrl+Caps"
 
-#~ msgid "_Region:"
-#~ msgstr "_Region:"
+msgid "_Region:"
+msgstr "_Region:"
 
-#~ msgid "_City:"
-#~ msgstr "_City:"
+msgid "_City:"
+msgstr "_City:"
 
-#~ msgid "_Network Time"
-#~ msgstr "_Network Time"
+msgid "_Network Time"
+msgstr "_Network Time"
 
 #~ msgid "Set the time one hour ahead."
 #~ msgstr "Set the time one hour ahead."

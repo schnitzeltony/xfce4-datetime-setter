@@ -9389,14 +9389,14 @@ msgstr "Sistemski zvoki"
 #~ msgid "Estimated battery capacity: %s"
 #~ msgstr "Ocenjeno trajanje baterije: %s"
 
-#~ msgid "_Region:"
-#~ msgstr "_Območje:"
+msgid "_Region:"
+msgstr "_Območje:"
 
-#~ msgid "_City:"
-#~ msgstr "_Mesto:"
+msgid "_City:"
+msgstr "_Mesto:"
 
-#~ msgid "_Network Time"
-#~ msgstr "Omrežni _čas"
+msgid "_Network Time"
+msgstr "Omrežni _čas"
 
 #~ msgid "Set the time one hour ahead."
 #~ msgstr "Nastavi čas za eno uro naprej."

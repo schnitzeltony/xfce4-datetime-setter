@@ -9523,14 +9523,14 @@ msgstr "Sonidos del sistema"
 #~ msgid "_Detect Displays"
 #~ msgstr "_Detectar pantallas"
 
-#~ msgid "_Region:"
-#~ msgstr "_Región:"
+msgid "_Region:"
+msgstr "_Región:"
 
-#~ msgid "_City:"
-#~ msgstr "_Ciudad:"
+msgid "_City:"
+msgstr "_Ciudad:"
 
-#~ msgid "_Network Time"
-#~ msgstr "_Hora de red"
+msgid "_Network Time"
+msgstr "_Hora de red"
 
 #~ msgid "Set the time one hour ahead."
 #~ msgstr "Ajustar la hora una hora hacia adelante."

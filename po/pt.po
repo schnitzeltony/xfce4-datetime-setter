@@ -929,6 +929,15 @@ msgstr "Mês"
 msgid "Year"
 msgstr "Ano"
 
+msgid "_Region:"
+msgstr "_Região:"
+
+msgid "_City:"
+msgstr "_Cidade:"
+
+msgid "_Network Time"
+msgstr "_Hora de Rede"
+
 #. Translators: This is the full date and time format used in 12-hour mode.
 #: ../panels/datetime/cc-datetime-panel.c:340
 msgid "%e %B %Y, %l:%M %p"

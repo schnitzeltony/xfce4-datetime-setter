@@ -8155,14 +8155,14 @@ msgstr "هیچ نتیجه‌ای پیدا نشد"
 #~ msgid "Ctrl+Caps"
 #~ msgstr "مهار+قفل‌تبدیل"
 
-#~ msgid "_Region:"
-#~ msgstr "_منطقه:"
+msgid "_Region:"
+msgstr "_منطقه:"
 
-#~ msgid "_City:"
-#~ msgstr "_شهر:"
+msgid "_City:"
+msgstr "_شهر:"
 
-#~ msgid "_Network Time"
-#~ msgstr "_زمان شبکه"
+msgid "_Network Time"
+msgstr "_زمان شبکه"
 
 #~ msgid "Set the time one hour ahead."
 #~ msgstr "تنظیم زمان به یک ساعت جلو."

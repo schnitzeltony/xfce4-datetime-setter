@@ -8060,14 +8060,14 @@ msgstr "Не знайдено жодного результату"
 #~ msgid "Account Information"
 #~ msgstr "Інформація про обліковий запис"
 
-#~ msgid "_Region:"
-#~ msgstr "_Область:"
+msgid "_Region:"
+msgstr "_Область:"
 
-#~ msgid "_City:"
-#~ msgstr "_Місто:"
+msgid "_City:"
+msgstr "_Місто:"
 
-#~ msgid "_Network Time"
-#~ msgstr "М_ережевий час"
+msgid "_Network Time"
+msgstr "М_ережевий час"
 
 #~ msgid "Set the time one hour ahead."
 #~ msgstr "Встановити час на одну годину пізніше."

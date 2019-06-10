@@ -8481,14 +8481,14 @@ msgstr "Sistemski zvuci"
 #~ msgid "Alt+Caps"
 #~ msgstr "Alt+velika/mala slova"
 
-#~ msgid "_Region:"
-#~ msgstr "_Region:"
+msgid "_Region:"
+msgstr "_Region:"
 
-#~ msgid "_City:"
-#~ msgstr "_Grad:"
+msgid "_City:"
+msgstr "_Grad:"
 
-#~ msgid "_Network Time"
-#~ msgstr "_Mrežno vreme"
+msgid "_Network Time"
+msgstr "_Mrežno vreme"
 
 #~ msgid "Set the time one hour ahead."
 #~ msgstr "Podesi vreme jedan sat unapred."

@@ -1414,6 +1414,15 @@ msgstr "24시간"
 msgid "AM / PM"
 msgstr "오전 / 오후"
 
+msgid "_Region:"
+msgstr "지역(_R):"
+
+msgid "_City:"
+msgstr "도시(_C):"
+
+msgid "_Network Time"
+msgstr "네트워크 시간(_N)"
+
 #: panels/datetime/gnome-datetime-panel.desktop.in.in:4
 msgid "Change the date and time, including time zone"
 msgstr "날짜와 시각(표준 시간대 포함)을 바꿉니다"

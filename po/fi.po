@@ -1394,6 +1394,15 @@ msgstr "24 tuntia"
 msgid "AM / PM"
 msgstr "AM / PM"
 
+msgid "_Region:"
+msgstr "_Alue:"
+
+msgid "_City:"
+msgstr "_Kaupunki:"
+
+msgid "_Network Time"
+msgstr "_Verkkoaika"
+
 #: panels/datetime/gnome-datetime-panel.desktop.in.in:4
 msgid "Change the date and time, including time zone"
 msgstr "Vaihda aikaa, päivää tai aikavyöhykettä"

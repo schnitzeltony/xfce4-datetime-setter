@@ -9313,14 +9313,14 @@ msgstr "Ήχοι συστήματος"
 #~ "Τα αρχεία εικόνων μπορούν να μεταφερθούν σε αυτό το παράθυρο για αυτόματη "
 #~ "συμπλήρωση των παραπάνω πεδίων."
 
-#~ msgid "_Region:"
-#~ msgstr "Περιο_χή:"
+msgid "_Region:"
+msgstr "Περιο_χή:"
 
-#~ msgid "_City:"
-#~ msgstr "Πό_λη:"
+msgid "_City:"
+msgstr "Πό_λη:"
 
-#~ msgid "_Network Time"
-#~ msgstr "Ώρα _δικτύου"
+msgid "_Network Time"
+msgstr "Ώρα _δικτύου"
 
 #~ msgid "Set the time one hour ahead."
 #~ msgstr "Ορισμός της ώρας μια ώρα μπροστά."

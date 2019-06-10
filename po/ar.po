@@ -9080,14 +9080,14 @@ msgstr "أصوات النظام"
 #~ msgid "Account Information"
 #~ msgstr "معلومات الحساب"
 
-#~ msgid "_Region:"
-#~ msgstr "الم_نطقة:"
+msgid "_Region:"
+msgstr "الم_نطقة:"
 
-#~ msgid "_City:"
-#~ msgstr "الم_دينة:"
+msgid "_City:"
+msgstr "الم_دينة:"
 
-#~ msgid "_Network Time"
-#~ msgstr "وقت ال_شبكة"
+msgid "_Network Time"
+msgstr "وقت ال_شبكة"
 
 #~ msgid "Set the time one hour ahead."
 #~ msgstr "قدّم الوقت ساعة واحدة."

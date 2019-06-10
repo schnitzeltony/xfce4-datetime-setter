@@ -1026,6 +1026,15 @@ msgstr "24 horas"
 msgid "AM / PM"
 msgstr "AM/PM"
 
+msgid "_Region:"
+msgstr "_Rechión:"
+
+msgid "_City:"
+msgstr "_Ciudat:"
+
+msgid "_Network Time"
+msgstr "_Hora de ret"
+
 #: ../panels/datetime/gnome-datetime-panel.desktop.in.in.h:2
 msgid "Change the date and time, including time zone"
 msgstr "Cambiar a calendata y a hora, incluindo a zona horaria"

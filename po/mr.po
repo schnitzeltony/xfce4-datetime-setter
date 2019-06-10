@@ -7276,14 +7276,14 @@ msgstr "पसंती;सेटिंग्स्;"
 #~ msgid "_Select"
 #~ msgstr "निवडा(_S)"
 
-#~ msgid "_Region:"
-#~ msgstr "क्षेत्र (_R):"
+msgid "_Region:"
+msgstr "क्षेत्र (_R):"
 
-#~ msgid "_City:"
-#~ msgstr "शहर (_i):"
+msgid "_City:"
+msgstr "शहर (_i):"
 
-#~ msgid "_Network Time"
-#~ msgstr "नेटवर्क वेळ (_N)"
+msgid "_Network Time"
+msgstr "नेटवर्क वेळ (_N)"
 
 #~ msgid ":"
 #~ msgstr ":"

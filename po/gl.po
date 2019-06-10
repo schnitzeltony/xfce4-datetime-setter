@@ -9239,14 +9239,14 @@ msgstr "Sistemas de son"
 #~ msgid "Estimated battery capacity: %s"
 #~ msgstr "Capacidade da batería estimada: %s"
 
-#~ msgid "_Region:"
-#~ msgstr "_Rexión:"
+msgid "_Region:"
+msgstr "_Rexión:"
 
-#~ msgid "_City:"
-#~ msgstr "_Cidade:"
+msgid "_City:"
+msgstr "_Cidade:"
 
-#~ msgid "_Network Time"
-#~ msgstr "_Hora de rede"
+msgid "_Network Time"
+msgstr "_Hora de rede"
 
 #~ msgid "Set the time one hour ahead."
 #~ msgstr "Axustar a hora unha hora cara adiante."

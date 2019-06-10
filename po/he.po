@@ -7833,14 +7833,14 @@ msgstr "Hotspot"
 #~ msgid "Account Information"
 #~ msgstr "פרטי חשבון"
 
-#~ msgid "_Region:"
-#~ msgstr "א_זור:"
+msgid "_Region:"
+msgstr "א_זור:"
 
-#~ msgid "_City:"
-#~ msgstr "_עיר"
+msgid "_City:"
+msgstr "_עיר"
 
-#~ msgid "_Network Time"
-#~ msgstr "_זמן הרשת"
+msgid "_Network Time"
+msgstr "_זמן הרשת"
 
 #~ msgid ":"
 #~ msgstr ":"

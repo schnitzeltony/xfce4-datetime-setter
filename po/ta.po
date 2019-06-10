@@ -7430,14 +7430,14 @@ msgstr "விருப்பங்கள்;அமைப்புகள்;"
 #~ msgid "Ctrl+Caps"
 #~ msgstr "Ctrl+Caps"
 
-#~ msgid "_Region:"
-#~ msgstr "_R வட்டாரம்:"
+msgid "_Region:"
+msgstr "_R வட்டாரம்:"
 
-#~ msgid "_City:"
-#~ msgstr "நகரம் (_C):"
+msgid "_City:"
+msgstr "நகரம் (_C):"
 
-#~ msgid "_Network Time"
-#~ msgstr "_N பிணைய நேரம்"
+msgid "_Network Time"
+msgstr "_N பிணைய நேரம்"
 
 #~ msgid ":"
 #~ msgstr ":"

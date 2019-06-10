@@ -1386,6 +1386,15 @@ msgstr "24 val."
 msgid "AM / PM"
 msgstr "Diena / Naktis"
 
+msgid "_Region:"
+msgstr "_Regionas:"
+
+msgid "_City:"
+msgstr "_Miestas:"
+
+msgid "_Network Time"
+msgstr "_Tinklo laikas:"
+
 #: panels/datetime/gnome-datetime-panel.desktop.in.in:4
 msgid "Change the date and time, including time zone"
 msgstr "Keiskite datą ir laiką, įskaitant laiko juostą"

@@ -1415,6 +1415,15 @@ msgstr "24 hores"
 msgid "AM / PM"
 msgstr "AM / PM"
 
+msgid "_Region:"
+msgstr "_Regió:"
+
+msgid "_City:"
+msgstr "_Ciutat:"
+
+msgid "_Network Time"
+msgstr "_Hora de la xarxa"
+
 #: panels/datetime/gnome-datetime-panel.desktop.in.in:4
 msgid "Change the date and time, including time zone"
 msgstr "Canvieu la data i l'hora, incloent-hi la zona horària"

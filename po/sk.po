@@ -1533,6 +1533,15 @@ msgstr "24-hodinový"
 msgid "AM / PM"
 msgstr "AM / PM"
 
+msgid "_Region:"
+msgstr "_Región:"
+
+msgid "_City:"
+msgstr "_Mesto:"
+
+msgid "_Network Time"
+msgstr "Čas zo _siete"
+
 # desktop entry comment
 #: panels/datetime/gnome-datetime-panel.desktop.in.in:4
 msgid "Change the date and time, including time zone"

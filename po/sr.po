@@ -9190,14 +9190,14 @@ msgstr "Системски звуци"
 #~ msgid "Alt+Caps"
 #~ msgstr "Алт+велика/мала слова"
 
-#~ msgid "_Region:"
-#~ msgstr "_Регион:"
+msgid "_Region:"
+msgstr "_Регион:"
 
-#~ msgid "_City:"
-#~ msgstr "_Град:"
+msgid "_City:"
+msgstr "_Град:"
 
-#~ msgid "_Network Time"
-#~ msgstr "_Мрежно време"
+msgid "_Network Time"
+msgstr "_Мрежно време"
 
 #~ msgid "Set the time one hour ahead."
 #~ msgstr "Подеси време један сат унапред."

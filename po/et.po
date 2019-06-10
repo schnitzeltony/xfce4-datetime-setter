@@ -5515,14 +5515,14 @@ msgstr "Eelistused;Sätted;Seaded;Seadistused;"
 #~ msgid "Ctrl+Caps"
 #~ msgstr "Ctrl+Caps"
 
-#~ msgid "_Region:"
-#~ msgstr "Piirkond:"
+msgid "_Region:"
+msgstr "Piirkond:"
 
-#~ msgid "_City:"
-#~ msgstr "_Linn:"
+msgid "_City:"
+msgstr "_Linn:"
 
-#~ msgid "_Network Time"
-#~ msgstr "_Võrguaeg"
+msgid "_Network Time"
+msgstr "_Võrguaeg"
 
 #~ msgid ":"
 #~ msgstr ":"

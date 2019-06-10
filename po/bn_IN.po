@@ -7802,11 +7802,11 @@ msgstr "অগ্রাধিকার;সেটিং;"
 #~ msgid "Alt+Caps"
 #~ msgstr "Alt+Caps"
 
-#~ msgid "_Region:"
-#~ msgstr "অঞ্চল (_R):"
+msgid "_Region:"
+msgstr "অঞ্চল (_R):"
 
-#~ msgid "_City:"
-#~ msgstr "শহর (_C):"
+msgid "_City:"
+msgstr "শহর (_C):"
 
 #~ msgid "_Network Time"
 #~ msgstr "নেটওয়ার্ক সময় (_N)"

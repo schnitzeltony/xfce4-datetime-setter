@@ -7351,14 +7351,14 @@ msgstr "পছন্দসমূহ;সংহতিসমূহ;"
 #~ msgid "Ctrl+Caps"
 #~ msgstr "Ctrl+Caps"
 
-#~ msgid "_Region:"
-#~ msgstr "অঞ্চল (_R):"
+msgid "_Region:"
+msgstr "অঞ্চল (_R):"
 
-#~ msgid "_City:"
-#~ msgstr "চহৰ (_C):"
+msgid "_City:"
+msgstr "চহৰ (_C):"
 
-#~ msgid "_Network Time"
-#~ msgstr "নেটৱৰ্ক সময় (_N)"
+msgid "_Network Time"
+msgstr "নেটৱৰ্ক সময় (_N)"
 
 #~ msgid ":"
 #~ msgstr ":"

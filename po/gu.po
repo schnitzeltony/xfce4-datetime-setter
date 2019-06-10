@@ -7691,14 +7691,14 @@ msgstr "પસંદગીઓ;સુયોજનો;"
 #~ msgid "_Select"
 #~ msgstr "પસંદ કરો (_S)"
 
-#~ msgid "_Region:"
-#~ msgstr "વિસ્તાર (_R):"
+msgid "_Region:"
+msgstr "વિસ્તાર (_R):"
 
-#~ msgid "_City:"
-#~ msgstr "શહેર (_C):"
+msgid "_City:"
+msgstr "શહેર (_C):"
 
-#~ msgid "_Network Time"
-#~ msgstr "નેટવર્ક સમય (_N)"
+msgid "_Network Time"
+msgstr "નેટવર્ક સમય (_N)"
 
 #~ msgid ":"
 #~ msgstr ":"

@@ -7794,14 +7794,14 @@ msgstr "จุดแพร่สัญญาณ"
 #~ msgid "Right Ctrl+Shift"
 #~ msgstr "Ctrl+Shift ขวา"
 
-#~ msgid "_Region:"
-#~ msgstr "ภูมิ_ภาค:"
+msgid "_Region:"
+msgstr "ภูมิ_ภาค:"
 
-#~ msgid "_City:"
-#~ msgstr "เ_มือง:"
+msgid "_City:"
+msgstr "เ_มือง:"
 
-#~ msgid "_Network Time"
-#~ msgstr "เวลาเ_ครือข่าย"
+msgid "_Network Time"
+msgstr "เวลาเ_ครือข่าย"
 
 #~ msgid "Set the time one hour ahead."
 #~ msgstr "ตั้งเวลาไปข้างหน้าหนึ่งชั่วโมง"
