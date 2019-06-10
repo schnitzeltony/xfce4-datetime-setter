@@ -1065,7 +1065,7 @@ xfce_date_time_dialog_setup (GObject *dlgobj, GtkBuilder *builder)
 
     city_modelsort = GTK_TREE_MODEL_SORT (W ("city_modelsort"));
     gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (city_modelsort), 
-										  CITY_COL_CITY_TRANSLATED,
+                                          CITY_COL_CITY_TRANSLATED,
                                           GTK_SORT_ASCENDING);
 
     widget = GTK_WIDGET (W ("region_combobox"));
