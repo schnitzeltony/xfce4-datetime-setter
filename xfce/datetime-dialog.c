@@ -73,10 +73,7 @@ struct _XfceDateTimeDialogPrivate
     guint32             last_displayed_day;
 };
 
-G_DEFINE_TYPE (XfceDateTimeDialog, xfce_date_time_dialog, G_TYPE_OBJECT)
-
-#define XFCE_DATE_TIME_DIALOG_PRIVATE(o) \
-    (G_TYPE_INSTANCE_GET_PRIVATE ((o), XFCE_TYPE_DATE_TIME_DIALOG, XfceDateTimeDialogPrivate))
+G_DEFINE_TYPE_WITH_PRIVATE (XfceDateTimeDialog, xfce_date_time_dialog, G_TYPE_OBJECT);
 
 enum
 {
@@ -153,8 +150,6 @@ xfce_date_time_dialog_class_init (XfceDateTimeDialogClass *klass)
 {
     GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-    g_type_class_add_private (klass, sizeof (XfceDateTimeDialogPrivate));
-
     object_class->dispose = xfce_date_time_dialog_dispose;
 }
 
@@ -164,7 +159,7 @@ xfce_date_time_dialog_init (XfceDateTimeDialog *xfdtdlg)
     XfceDateTimeDialogPrivate *priv;
     GError *error;
 
-    priv = xfdtdlg->priv = XFCE_DATE_TIME_DIALOG_PRIVATE (xfdtdlg);
+    priv = xfdtdlg->priv = xfce_date_time_dialog_get_instance_private (xfdtdlg);
 
     priv->cancellable = g_cancellable_new ();
 
@@ -1003,7 +998,7 @@ xfce_date_time_dialog_setup (GObject *dlgobj, GtkBuilder *builder)
     int ret;
 
     xfdtdlg = XFCE_DATE_TIME_DIALOG(dlgobj);
-    priv = XFCE_DATE_TIME_DIALOG_PRIVATE (xfdtdlg);
+    priv = xfce_date_time_dialog_get_instance_private (xfdtdlg);
     priv->builder = builder;
 
     /* set up apply-button */
