@@ -6,7 +6,6 @@ Exec=xfce4-datetime-settings
 Icon=xfce4-datetime
 Terminal=false
 Type=Application
-NoDisplay=true
 StartupNotify=true
 Categories=XFCE;GTK;Settings;DesktopSettings;X-XFCE-SettingsDialog;X-XFCE-HardwareSettings;
 OnlyShowIn=XFCE;
