@@ -595,7 +595,7 @@ update_datetime_widget_sensivity (XfceDateTimeDialog *xfdtdlg,
 {
     XfceDateTimeDialogPrivate *priv = xfdtdlg->priv;
 
-    gtk_widget_set_sensitive (W("table1"), sensitive);
+    gtk_widget_set_sensitive (W("date_grid"), sensitive);
     gtk_widget_set_sensitive (W("table2"), sensitive);
 }
 
