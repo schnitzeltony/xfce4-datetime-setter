@@ -189,7 +189,7 @@ update_apply_state (XfceDateTimeDialog *xfdtdlg)
     gboolean anychange = priv->ntp_changed ||
                          priv->timezone_changed ||
                          priv->datetime_changed;
-    GtkWidget *widget = W ("button-apply");
+    GtkWidget *widget = W ("button_apply");
     gtk_widget_set_sensitive (widget, anychange && priv->current_apply_action == APPLY_IDLE);
 }
 
@@ -202,9 +202,9 @@ save_user_change_date (XfceDateTimeDialog *xfdtdlg)
 
     old_date = priv->date;
 
-    mon = 1 + gtk_combo_box_get_active (GTK_COMBO_BOX (W ("month-combobox")));
-    y = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (W ("year-spinbutton")));
-    d = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (W ("day-spinbutton")));
+    mon = 1 + gtk_combo_box_get_active (GTK_COMBO_BOX (W ("month_combobox")));
+    y = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (W ("year_spinbutton")));
+    d = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (W ("day_spinbutton")));
 
     priv->date = g_date_time_new_local (y, mon, d,
                                         g_date_time_get_hour (old_date),
@@ -232,13 +232,13 @@ on_user_month_year_changed (GtkWidget          *widget,
     GtkAdjustment *adj;
     GtkSpinButton *day_spin;
 
-    mon = 1 + gtk_combo_box_get_active (GTK_COMBO_BOX (W ("month-combobox")));
-    y = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (W ("year-spinbutton")));
+    mon = 1 + gtk_combo_box_get_active (GTK_COMBO_BOX (W ("month_combobox")));
+    y = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (W ("year_spinbutton")));
 
     /* Check the number of days in that month */
     num_days = g_date_get_days_in_month (mon, y);
 
-    day_spin = GTK_SPIN_BUTTON (W("day-spinbutton"));
+    day_spin = GTK_SPIN_BUTTON (W("day_spinbutton"));
     adj = GTK_ADJUSTMENT (gtk_spin_button_get_adjustment (day_spin));
     gtk_adjustment_set_upper (adj, num_days);
 
@@ -296,7 +296,7 @@ update_displayed_date (XfceDateTimeDialog *xfdtdlg)
         priv->last_displayed_day = locday;
 
         /* day */
-        widget = W ("day-spinbutton");
+        widget = W ("day_spinbutton");
         g_signal_handlers_block_by_func (widget, on_user_day_changed, xfdtdlg);
         num_days = g_date_get_days_in_month (g_date_time_get_month (priv->date),
                                              g_date_time_get_year (priv->date));
@@ -307,14 +307,14 @@ update_displayed_date (XfceDateTimeDialog *xfdtdlg)
         g_signal_handlers_unblock_by_func (widget, on_user_day_changed, xfdtdlg);
 
         /* month */
-        widget = W ("month-combobox");
+        widget = W ("month_combobox");
         g_signal_handlers_block_by_func (widget, on_user_month_year_changed, xfdtdlg);
         gtk_combo_box_set_active (GTK_COMBO_BOX (widget),
                                   g_date_time_get_month (priv->date) - 1);
         g_signal_handlers_unblock_by_func (widget, on_user_month_year_changed, xfdtdlg);
 
         /* year */
-        widget = W ("year-spinbutton");
+        widget = W ("year_spinbutton");
         g_signal_handlers_block_by_func (widget, on_user_month_year_changed, xfdtdlg);
         gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget),
                                    (gdouble)g_date_time_get_year (priv->date));
@@ -1002,7 +1002,7 @@ xfce_date_time_dialog_setup (GObject *dlgobj, GtkBuilder *builder)
     priv->builder = builder;
 
     /* set up apply-button */
-    g_signal_connect (W ("button-apply"), "clicked",
+    g_signal_connect (W ("button_apply"), "clicked",
                       G_CALLBACK (on_user_apply), xfdtdlg);
     update_apply_state (xfdtdlg);
 
@@ -1025,24 +1025,24 @@ xfce_date_time_dialog_setup (GObject *dlgobj, GtkBuilder *builder)
     * is presented correctly for RTL languages */
     gtk_widget_set_direction (W ("table2"), GTK_TEXT_DIR_LTR);
 
-    g_signal_connect (G_OBJECT (W ("month-combobox")), "changed",
+    g_signal_connect (G_OBJECT (W ("month_combobox")), "changed",
                       G_CALLBACK (on_user_month_year_changed), xfdtdlg);
 
     num_days = g_date_get_days_in_month (g_date_time_get_month (priv->date),
                                          g_date_time_get_year (priv->date));
     adjustment = GTK_ADJUSTMENT (gtk_adjustment_new (g_date_time_get_day_of_month (priv->date), 1,
                                                      num_days + 1, 1, 10, 0));
-    gtk_spin_button_set_adjustment (GTK_SPIN_BUTTON (W ("day-spinbutton")),
+    gtk_spin_button_set_adjustment (GTK_SPIN_BUTTON (W ("day_spinbutton")),
                                     adjustment);
-    g_signal_connect (G_OBJECT (W("day-spinbutton")), "value-changed",
+    g_signal_connect (G_OBJECT (W("day_spinbutton")), "value-changed",
                       G_CALLBACK (on_user_day_changed), xfdtdlg);
 
     adjustment = GTK_ADJUSTMENT (gtk_adjustment_new (g_date_time_get_year (priv->date),
                                                      0.0, G_MAXDOUBLE, 1,
                                                      10, 0));
-    gtk_spin_button_set_adjustment (GTK_SPIN_BUTTON (W("year-spinbutton")),
+    gtk_spin_button_set_adjustment (GTK_SPIN_BUTTON (W("year_spinbutton")),
                                     adjustment);
-    g_signal_connect (G_OBJECT (W("year-spinbutton")), "value-changed",
+    g_signal_connect (G_OBJECT (W("year_spinbutton")), "value-changed",
                       G_CALLBACK (on_user_month_year_changed), xfdtdlg);
 
     /* set up timezone map */

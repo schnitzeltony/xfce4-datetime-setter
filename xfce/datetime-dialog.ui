@@ -95,10 +95,10 @@
       <placeholder/>
     </child>
     <child internal-child="vbox">
-      <object class="GtkBox" id="dialog-vbox1">
+      <object class="GtkBox" id="dialog_vbox1">
         <property name="can_focus">False</property>
         <child internal-child="action_area">
-          <object class="GtkButtonBox" id="dialog-action_area1">
+          <object class="GtkButtonBox" id="dialog_action_area1">
             <property name="can_focus">False</property>
             <child>
               <placeholder/>
@@ -273,7 +273,7 @@
                             <property name="can_focus">False</property>
                             <property name="spacing">12</property>
                             <child>
-                              <object class="GtkSpinButton" id="year-spinbutton">
+                              <object class="GtkSpinButton" id="year_spinbutton">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="invisible_char">•</property>
@@ -290,7 +290,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkComboBox" id="month-combobox">
+                              <object class="GtkComboBox" id="month_combobox">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="model">month_liststore</property>
@@ -308,7 +308,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkSpinButton" id="day-spinbutton">
+                              <object class="GtkSpinButton" id="day_spinbutton">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="invisible_char">•</property>
@@ -570,7 +570,7 @@
                             <property name="can_focus">False</property>
                             <property name="homogeneous">True</property>
                             <child>
-                              <object class="GtkButton" id="button-apply">
+                              <object class="GtkButton" id="button_apply">
                                 <property name="label">gtk-apply</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
