@@ -382,12 +382,12 @@
                             <property name="can_focus">False</property>
                             <property name="xscale">0</property>
                             <child>
-                              <object class="GtkTable" id="table2">
+                              <object class="GtkTable" id="time_table">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="n_rows">3</property>
                                 <property name="n_columns">5</property>
-                                <property name="column_spacing">12</property>
+                                <property name="column_spacing">8</property>
                                 <property name="row_spacing">6</property>
                                 <child>
                                   <placeholder/>
@@ -402,7 +402,7 @@
                                     <property name="label" translatable="yes" comments="Translator: this is the separator between hours and minutes, like in HH:MM">:</property>
                                     <attributes>
                                       <attribute name="weight" value="bold"/>
-                                      <attribute name="scale" value="2.5"/>
+                                      <attribute name="scale" value="2.0"/>
                                     </attributes>
                                   </object>
                                   <packing>
@@ -422,7 +422,7 @@
                                     <property name="label">16</property>
                                     <attributes>
                                       <attribute name="weight" value="bold"/>
-                                      <attribute name="scale" value="2.5"/>
+                                      <attribute name="scale" value="2.0"/>
                                     </attributes>
                                   </object>
                                   <packing>
@@ -437,7 +437,7 @@
                                     <property name="label">45</property>
                                     <attributes>
                                       <attribute name="weight" value="bold"/>
-                                      <attribute name="scale" value="2.5"/>
+                                      <attribute name="scale" value="2.0"/>
                                     </attributes>
                                   </object>
                                   <packing>
@@ -528,7 +528,7 @@
                                     <property name="label" translatable="yes" comments="Translator: this is the separator between hours and minutes, like in HH:MM">:</property>
                                     <attributes>
                                       <attribute name="weight" value="bold"/>
-                                      <attribute name="scale" value="2.5"/>
+                                      <attribute name="scale" value="2.0"/>
                                     </attributes>
                                   </object>
                                   <packing>
@@ -548,7 +548,7 @@
                                     <property name="label">28</property>
                                     <attributes>
                                       <attribute name="weight" value="bold"/>
-                                      <attribute name="scale" value="2.5"/>
+                                      <attribute name="scale" value="2.0"/>
                                     </attributes>
                                   </object>
                                   <packing>

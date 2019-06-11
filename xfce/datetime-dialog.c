@@ -596,7 +596,7 @@ update_datetime_widget_sensivity (XfceDateTimeDialog *xfdtdlg,
     XfceDateTimeDialogPrivate *priv = xfdtdlg->priv;
 
     gtk_widget_set_sensitive (W("date_grid"), sensitive);
-    gtk_widget_set_sensitive (W("table2"), sensitive);
+    gtk_widget_set_sensitive (W("time_table"), sensitive);
 }
 
 static void
@@ -1023,7 +1023,7 @@ xfce_date_time_dialog_setup (GObject *dlgobj, GtkBuilder *builder)
 
     /* Force the direction for the time, so that the time
     * is presented correctly for RTL languages */
-    gtk_widget_set_direction (W ("table2"), GTK_TEXT_DIR_LTR);
+    gtk_widget_set_direction (W ("time_table"), GTK_TEXT_DIR_LTR);
 
     g_signal_connect (G_OBJECT (W ("month_combobox")), "changed",
                       G_CALLBACK (on_user_month_year_changed), xfdtdlg);
