@@ -163,7 +163,8 @@ cc_timezone_map_get_preferred_width (GtkWidget *widget,
   size = gdk_pixbuf_get_width (map->orig_background);
 
   if (minimum != NULL)
-    *minimum = size;
+    /* XFCE: aloow shrink */
+    *minimum = size/2;
   if (natural != NULL)
     *natural = size;
 }
@@ -179,7 +180,8 @@ cc_timezone_map_get_preferred_height (GtkWidget *widget,
   size = gdk_pixbuf_get_height (map->orig_background);
 
   if (minimum != NULL)
-    *minimum = size;
+    /* XFCE: aloow shrink */
+    *minimum = size/2;
   if (natural != NULL)
     *natural = size;
 }
