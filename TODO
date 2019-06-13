@@ -1,0 +1,5 @@
+* Add README
+* Rework dialog layout (resize)
+* Do not skip changes on tiemdate1 evemts
+* Add script / patches to auto update GNOME sources
+* Add Undo button?
