@@ -175,7 +175,8 @@ datetime_panel_lib = static_library(
 
 datetime_panel_dep = declare_dependency(
   include_directories: [ common_inc, include_directories('.') ],
-  link_with: datetime_panel_lib
+  link_with: datetime_panel_lib,
+  sources: resources
 )
 
 subdir('po-timezones')
